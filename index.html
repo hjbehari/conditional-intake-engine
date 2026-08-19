@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Discovery — Fixed Tracks + New Palette</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config={theme:{extend:{colors:{paper:'#F9F8F6',paper2:'#EFE9E3',borderc:'#D9CFC7',warm:'#C9B59C',ink:'#0A0A0B',signal:'#FF4D12'}}}}
+</script>
+<style>
+*{box-sizing:border-box} html,body{overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:#F9F8F6;color:#0A0A0B;-webkit-font-smoothing:antialiased}
+.satoshi{font-family:'Satoshi',sans-serif} .mono{font-family:'JetBrains Mono',monospace}
+input,select,textarea{font-size:16px !important}
+.card{transition:all 0.22s ease;background:#FFFFFF;border:1.5px solid #D9CFC7} .card:hover{transform:translateY(-1px);border-color:#C9B59C;box-shadow:0 4px 20px rgba(201,181,156,0.25)}
+.card-active{border-color:#0A0A0B !important;background:#FFFFFF !important;position:relative;box-shadow:0 6px 28px rgba(0,0,0,0.08)}
+.card-active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#FF4D12;border-radius:16px 0 0 16px}
+.card-active .dot{opacity:1 !important}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23C9B59C' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !important;box-shadow:0 0 0 3px rgba(201,181,156,0.35) !important}
+.error-box{border-left:3px solid #FF4D12 !important}
+.tag{background:#EFE9E3;border:1px solid #D9CFC7;color:#0A0A0B}
+</style>
+</head>
+<body class="bg-[#F9F8F6] min-h-screen flex flex-col">
+<header class="w-full border-b border-[#D9CFC7] bg-[#F9F8F6]/90 backdrop-blur-md sticky top-0 z-50">
+<div class="max-w-3xl mx-auto px-5 sm:px-8 h-[64px] flex items-center justify-between">
+<div class="flex items-center gap-3"><div class="w-2.5 h-2.5 rounded-full bg-[#FF4D12] animate-pulse"></div><span class="satoshi font-bold text-[13px] tracking-tight text-[#0A0A0B]">Hamza Jawaid — Intake Assistant</span><span class="mono text-[10px] text-[#0A0A0B]/50 hidden sm:inline border border-[#D9CFC7] rounded-full px-2 py-1 bg-[#EFE9E3]">PALETTE FIX</span></div>
+<div class="mono text-[11px] text-[#0A0A0B]/60" id="progressText">Step 1 of 4 • Objective</div>
+</div>
+<div class="w-full h-[1px] bg-[#D9CFC7]"><div id="progressBar" class="h-full bg-[#0A0A0B] transition-all duration-500 relative" style="width:25%"><div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#FF4D12] shadow-[0_0_0_4px_rgba(201,181,156,0.4)]"></div></div></div>
+</header>
+
+<main class="max-w-3xl mx-auto px-5 sm:px-8 py-6 sm:py-10 w-full flex-grow flex flex-col gap-6">
+<div id="chat" class="flex flex-col gap-5">
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-[#0A0A0B] text-[#F9F8F6] flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1">H</div>
+<div class="space-y-3 max-w-[92%] sm:max-w-[78%]">
+<div class="bg-white border border-[#D9CFC7] rounded-2xl rounded-tl-sm p-5 shadow-sm">
+<p class="satoshi font-bold text-[20px] sm:text-[24px] leading-[1.15] text-[#0A0A0B]">Hey — let's see if we're a fit.</p>
+<p class="text-[13px] leading-6 text-[#0A0A0B]/70 mt-3">I don't ask everyone the same questions. Pick your track, and every question after that changes. One step at a time.</p>
+<div class="mt-3 flex flex-wrap gap-2 mono text-[10px]"><span class="tag rounded-full px-2.5 py-1">~6 min</span><span class="tag rounded-full px-2.5 py-1">Private</span><span class="border border-[#C9B59C] bg-[#F9F8F6] rounded-full px-2.5 py-1 text-[#0A0A0B]/70">Track-aware • New palette</span></div>
+</div>
+<div class="bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl rounded-tl-sm p-4">
+<p class="mono text-[10px] uppercase tracking-wider opacity-60 mb-1">Step 1 of 4 — Core Qualification</p>
+<p class="text-[13px] leading-5">What primary objective are you solving? This sets the entire trajectory for Step 2 & 3.</p>
+</div>
+</div>
+</div>
+<div id="step1-cards" class="pl-0 sm:pl-11 grid grid-cols-1 sm:grid-cols-2 gap-3">
+<button data-service="Growth & Performance Marketing" class="card text-left p-5 rounded-2xl min-h-[132px] flex flex-col gap-3"><div class="flex justify-between items-start"><span class="mono text-[11px] text-[#0A0A0B]/40">01</span><div class="dot w-2 h-2 rounded-full bg-[#FF4D12] opacity-0"></div></div><div><h3 class="satoshi font-medium text-[14px] text-[#0A0A0B]">Growth & Performance Marketing</h3><p class="text-[12px] text-[#0A0A0B]/60 mt-1.5">Paid media, CAC/ROAS, scaling acquisition.</p></div></button>
+<button data-service="Google Ad Grants" class="card text-left p-5 rounded-2xl min-h-[132px] flex flex-col gap-3"><div class="flex justify-between"><span class="mono text-[11px] text-[#0A0A0B]/40">02</span><div class="dot w-2 h-2 rounded-full bg-[#FF4D12] opacity-0"></div></div><div><h3 class="satoshi font-medium text-[14px] text-[#0A0A0B]">Google Ad Grants</h3><p class="text-[12px] text-[#0A0A0B]/60 mt-1.5">Nonprofit $10k/mo — compliance & utilization.</p></div></button>
+<button data-service="E-Commerce & Custom Web" class="card text-left p-5 rounded-2xl min-h-[132px] flex flex-col gap-3"><div class="flex justify-between"><span class="mono text-[11px] text-[#0A0A0B]/40">03</span><div class="dot w-2 h-2 rounded-full bg-[#FF4D12] opacity-0"></div></div><div><h3 class="satoshi font-medium text-[14px] text-[#0A0A0B]">E-Commerce & Custom Web</h3><p class="text-[12px] text-[#0A0A0B]/60 mt-1.5">Shopify/Woo, CVR, speed, trust, checkout.</p></div></button>
+<button data-service="Full Digital Consultancy" class="card text-left p-5 rounded-2xl min-h-[132px] flex flex-col gap-3"><div class="flex justify-between"><span class="mono text-[11px] text-[#0A0A0B]/40">04</span><div class="dot w-2 h-2 rounded-full bg-[#FF4D12] opacity-0"></div></div><div><h3 class="satoshi font-medium text-[14px] text-[#0A0A0B]">Full Digital Consultancy</h3><p class="text-[12px] text-[#0A0A0B]/60 mt-1.5">End-to-end advisory — stack & growth system.</p></div></button>
+</div>
+<p id="err1" class="hidden pl-0 sm:pl-11 mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box">Select a track to continue — this sets all next questions.</p>
+</div>
+
+<div id="dynamic" class="flex flex-col gap-6"></div>
+
+<div id="nav" class="hidden sticky bottom-0 z-30 -mx-5 sm:-mx-8 px-5 sm:px-8 py-4 bg-[#F9F8F6]/95 backdrop-blur-md border-t border-[#D9CFC7] flex flex-col sm:flex-row gap-3" style="padding-bottom:calc(12px + env(safe-area-inset-bottom))">
+<div class="flex gap-2 w-full sm:w-auto">
+<button id="changeTrackBtn" class="mono text-[11px] uppercase tracking-wider px-4 py-3 rounded-xl border border-[#D9CFC7] bg-white hover:bg-[#EFE9E3] text-[#0A0A0B]">← Change track</button>
+<button id="prevBtn" class="hidden mono text-[11px] uppercase tracking-wider px-4 py-3 rounded-xl border border-[#D9CFC7] bg-white hover:bg-[#EFE9E3] text-[#0A0A0B]">Back</button>
+</div>
+<div class="flex gap-3 w-full sm:w-auto sm:ml-auto">
+<button id="nextBtn" class="flex-1 sm:flex-none satoshi font-bold text-[13px] uppercase tracking-wider px-6 py-3.5 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] hover:bg-black">Continue →</button>
+<button id="submitBtn" class="hidden flex-1 sm:flex-none satoshi font-bold text-[13px] uppercase tracking-wider px-6 py-3.5 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] hover:bg-black">Send to Hamza →</button>
+</div>
+</div>
+
+<div id="success" class="hidden py-8 space-y-6">
+<div class="text-center space-y-4">
+<div class="w-16 h-16 mx-auto rounded-full bg-[#0A0A0B] text-[#F9F8F6] flex items-center justify-center relative"><span class="text-xl">✓</span><div class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-[#FF4D12] border-2 border-[#F9F8F6]"></div></div>
+<h2 class="satoshi font-bold text-[32px] leading-tight text-[#0A0A0B]">Brief received.</h2>
+<p class="text-[14px] leading-6 text-[#0A0A0B]/60 max-w-md mx-auto">Sent to <span class="font-semibold text-[#0A0A0B]">hjbehari@gmail.com</span> — personalized next steps below.</p>
+</div>
+<div id="personalizedNext" class="max-w-xl mx-auto bg-white border border-[#D9CFC7] rounded-2xl p-6 space-y-4"></div>
+<div class="max-w-xl mx-auto space-y-3">
+<a href="https://calendly.com/hamzabehari/30min" target="_blank" class="block w-full satoshi font-bold text-[13px] uppercase px-6 py-4 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] text-center hover:bg-black">Book a call — 30 min →</a>
+<div class="grid grid-cols-2 gap-3"><button id="copyBtn" class="mono text-[11px] uppercase px-4 py-3 rounded-xl border border-[#D9CFC7] bg-white hover:bg-[#EFE9E3] text-[#0A0A0B]">Copy summary</button><button id="newBtn" class="mono text-[11px] uppercase px-4 py-3 rounded-xl border border-[#D9CFC7] bg-white hover:bg-[#EFE9E3] text-[#0A0A0B]">Start new</button></div>
+</div>
+<div id="summaryBox" class="text-left p-4 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] mono text-[11px] leading-5 whitespace-pre-wrap max-h-[260px] overflow-auto hidden max-w-xl mx-auto"></div>
+</div>
+</main>
+
+<footer class="w-full border-t border-[#D9CFC7] py-6 mt-4 bg-[#EFE9E3]/50"><div class="max-w-3xl mx-auto px-5 sm:px-8 flex justify-between mono text-[11px] text-[#0A0A0B]/50"><span>Private • hjbehari@gmail.com • Palette: #F9F8F6 #EFE9E3 #D9CFC7 #C9B59C + #0A0A0B #FF4D12</span><span>Fixed v3</span></div></footer>
+
+<script>
+let current=1, service='', state={};
+const progressBar=document.getElementById('progressBar'), progressText=document.getElementById('progressText');
+const chat=document.getElementById('chat'), dynamic=document.getElementById('dynamic'), step1Cards=document.getElementById('step1-cards'), err1=document.getElementById('err1');
+const nav=document.getElementById('nav'), prevBtn=document.getElementById('prevBtn'), nextBtn=document.getElementById('nextBtn'), submitBtn=document.getElementById('submitBtn'), changeTrackBtn=document.getElementById('changeTrackBtn');
+const success=document.getElementById('success');
+const BLOCKLIST=['idk','n/a','na','none','null','test','asdf','qwerty','blah','...','-','--','xxx','tbd','todo'];
+
+function isVague(s){ if(!s) return true; const t=s.trim().toLowerCase(); if(t.length<3) return true; if(BLOCKLIST.includes(t)) return true; if(t.length<8) return true; if(/^(.)\1+$/.test(t)) return true; if(/^[a-z]{1,4}$/.test(t)) return true; return false; }
+function isValidUrl(s){ if(!s) return true; try{ const u=s.startsWith('http')?s:'https://'+s; const url=new URL(u); return url.hostname.includes('.') && url.hostname.length>3; }catch(e){ return false; } }
+function isValidEmail(s){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s); }
+function saveState(){ try{ localStorage.setItem('discovery_palette_v3', JSON.stringify({current,service,state})); }catch(e){} }
+function clearState(){ state={}; service=''; try{ localStorage.removeItem('discovery_palette_v3'); }catch(e){} }
+function updateProgress(){ progressBar.style.width=(current/4*100)+'%'; const labels={1:'Objective',2:'Deep Dive',3:'Scoping',4:'Validation'}; progressText.textContent=`Step ${current} of 4 • ${labels[current]}`; }
+function assistantBubble(html){ const wrap=document.createElement('div'); wrap.className='flex gap-3'; wrap.innerHTML=`<div class="w-8 h-8 rounded-full bg-[#0A0A0B] text-[#F9F8F6] flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1">H</div><div class="bg-white border border-[#D9CFC7] rounded-2xl rounded-tl-sm p-4 sm:p-5 text-[13px] leading-6 max-w-[92%] sm:max-w-[78%] text-[#0A0A0B]">${html}</div>`; dynamic.appendChild(wrap); }
+function userBubble(text){ const wrap=document.createElement('div'); wrap.className='flex gap-3 ml-auto flex-row-reverse'; wrap.innerHTML=`<div class="w-8 h-8 rounded-full bg-[#FF4D12] text-white flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1">You</div><div class="bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl rounded-tr-sm p-4 text-[13px] max-w-[92%] sm:max-w-[78%]">${text}</div>`; dynamic.appendChild(wrap); }
+function attachInputListeners(){ dynamic.querySelectorAll('input,select,textarea').forEach(el=>{ if(!el.id) return; const handler=()=>{ if(el.type==='checkbox'){ if(!state[el.name]) state[el.name]=[]; state[el.name]=[...dynamic.querySelectorAll(`input[name="${el.name}"]:checked`)].map(i=>i.value); } else { state[el.id]=el.value; } saveState(); }; el.addEventListener('input', handler); el.addEventListener('change', handler); }); }
+function restoreValues(){ dynamic.querySelectorAll('input,select,textarea').forEach(el=>{ if(!el.id) return; if(el.type==='checkbox'){ const vals=state[el.name]||[]; el.checked=vals.includes(el.value); } else { if(state[el.id]!==undefined) el.value=state[el.id]; } }); }
+
+document.querySelectorAll('.card').forEach(card=>{
+ card.addEventListener('click', ()=>{
+   document.querySelectorAll('.card').forEach(c=>c.classList.remove('card-active'));
+   card.classList.add('card-active');
+   const newService=card.dataset.service;
+   if(service && service!==newService){ clearState(); dynamic.innerHTML=''; state.service=newService; }
+   service=newService; state.service=service; saveState(); err1.classList.add('hidden');
+   userBubble(`Selected: <b>${service}</b>`);
+   setTimeout(()=>{ assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 2 of 4 — Track-Specific Deep Dive</span><br><b class="satoshi text-[15px] text-[#0A0A0B]">Got it — ${service}.</b><br>Shifting context entirely. These questions ONLY apply to ${service}.`); renderStep2(); },300);
+ });
+});
+
+function renderStep2(){
+ current=2; updateProgress(); nav.classList.remove('hidden'); prevBtn.classList.add('hidden'); changeTrackBtn.classList.remove('hidden');
+ let html='';
+ if(service==='Growth & Performance Marketing'){
+   html=`<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Growth economics — paid only makes sense when economics make sense.</p><div class="space-y-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Current monthly ad spend *</label><select id="ad_spend" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"><option value="">Select</option><option><$1k</option><option>$1-5k</option><option>$5-15k</option><option>$15k+</option><option>Not running paid yet</option></select></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Current CAC / ROAS</label><input id="current_cac" placeholder="e.g. CAC $62, ROAS 1.8x" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Target CAC / ROAS</label><input id="target_cac" placeholder="e.g. CAC $35, ROAS 3x" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">LTV or AOV</label><input id="ltv_aov" placeholder="e.g. AOV $85, LTV $210" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">What's breaking in acquisition? * (min 10 chars)</label><textarea id="breaking_acq" rows="3" placeholder="Clicks but no sales / High CAC / Follow-up not working" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] text-[#0A0A0B]"></textarea></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div></div>`;
+ } else if(service==='Google Ad Grants'){
+   html=`<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Grants eligibility & utilization — $10k/mo is free only if compliance + conversion path works.</p><div class="space-y-4"><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Registered nonprofit? *</label><select id="nonprofit_status" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"><option value="">Select</option><option>Yes 501c3 US</option><option>Yes non-US</option><option>Pending</option><option>No</option></select></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Grants account status *</label><select id="grants_status" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"><option value="">Select</option><option>No account yet</option><option>Yes active</option><option>Yes suspended</option><option>Yes but under 5% CTR</option></select></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Current spend vs $10k</label><input id="grants_spend" placeholder="e.g. $340 of $10k" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Primary conversion goal</label><select id="grants_goal" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"><option value="">Select</option><option>Donations</option><option>Volunteer signups</option><option>Program applications</option><option>Newsletter</option></select></div></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Donor flow problem?</label><textarea id="grants_flow" rows="3" placeholder="Traffic comes but doesn't donate / No thank-you page" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] text-[#0A0A0B]"></textarea></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div></div>`;
+ } else if(service==='E-Commerce & Custom Web'){
+   html=`<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Storefront & conversion — most stores don't need more traffic, they need to do more with traffic.</p><div class="space-y-4"><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Platform *</label><select id="platform" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"><option value="">Select</option><option>Shopify</option><option>WooCommerce</option><option>Custom</option><option>Webflow</option></select></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Store URL</label><input id="store_url" type="url" placeholder="https://yourstore.com" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Traffic + Orders</label><div class="flex gap-2"><input id="traffic" placeholder="12k/mo" class="w-1/2 p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"><input id="orders" placeholder="180/mo" class="w-1/2 p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">CVR + AOV *</label><div class="flex gap-2"><input id="cvr" placeholder="1.8%" class="w-1/2 p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"><input id="aov" placeholder="$72" class="w-1/2 p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div></div></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Biggest storefront problem?</label><div class="flex flex-wrap gap-2"><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-[#D9CFC7] bg-[#EFE9E3] text-[13px] cursor-pointer text-[#0A0A0B]"><input type="checkbox" name="store_problems" value="Slow load"> Slow</label><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-[#D9CFC7] bg-[#EFE9E3] text-[13px] cursor-pointer text-[#0A0A0B]"><input type="checkbox" name="store_problems" value="Dropship template"> Dropship look</label><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-[#D9CFC7] bg-[#EFE9E3] text-[13px] cursor-pointer text-[#0A0A0B]"><input type="checkbox" name="store_problems" value="Trust"> Trust</label><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-[#D9CFC7] bg-[#EFE9E3] text-[13px] cursor-pointer text-[#0A0A0B]"><input type="checkbox" name="store_problems" value="Checkout"> Checkout</label></div></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div></div>`;
+ } else {
+   html=`<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Business & growth system — advisory only works if I see business, not just ads.</p><div class="space-y-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Business in one sentence * (min 10 chars)</label><input id="biz_sentence" placeholder="We help X do Y" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Team size & who owns growth? *</label><select id="team_growth" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"><option value="">Select</option><option>Solo founder</option><option>2-5 + you own growth</option><option>5-20 + marketing team</option><option>20+ + multiple teams</option></select></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Tech stack</label><input id="tech_stack" placeholder="WP + Woo, GA4, HubSpot" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Success in 90 days?</label><textarea id="success_90" rows="3" placeholder="Add 30 qualified leads/mo at <$40 CAC" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] text-[#0A0A0B]"></textarea></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div></div>`;
+ }
+ dynamic.innerHTML=html; attachInputListeners(); restoreValues();
+}
+
+function renderStep3(){
+ current=3; updateProgress(); prevBtn.classList.remove('hidden');
+ let html='';
+ if(service==='Growth & Performance Marketing'){
+   const spend=state.ad_spend||'';
+   if(spend.includes('<$1k') || spend.includes('Not running')){
+     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — pre-paid / low spend. Validate economics before scaling.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website / Landing to review *</label><input id="website" type="url" placeholder="https://janobi.agency" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Have you validated offer converts organically? *</label><select id="validated" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option>Yes, organic/referral converts</option><option>No, not yet</option><option>Some, but inconsistent</option></select></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Budget for testing? *</label><select id="test_budget" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option><$1k/mo</option><option>$1-3k/mo</option><option>$3k+/mo</option></select></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
+   } else {
+     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — already spending. Bottleneck is landing, follow-up, or tracking.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website + Ads link for teardown *</label><input id="website" type="url" placeholder="https://janobi.agency" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Attribution / tracking?</label><div class="flex flex-wrap gap-2"><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-white/20 bg-white/10 text-[12px] text-[#F9F8F6]"><input type="checkbox" name="tracking" value="Pixel"> Pixel</label><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-white/20 bg-white/10 text-[12px] text-[#F9F8F6]"><input type="checkbox" name="tracking" value="CAPI"> CAPI</label><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-white/20 bg-white/10 text-[12px] text-[#F9F8F6]"><input type="checkbox" name="tracking" value="GA4"> GA4</label></div></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Timeline to fix? *</label><select id="timeline" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option>Now</option><option>2-4 weeks</option><option>Exploring</option></select></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
+   }
+ } else if(service==='Google Ad Grants'){
+   const gs=state.grants_status||'';
+   if(gs.includes('suspended') || gs.includes('under 5%')){
+     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — compliance recovery mode.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website domain for verification *</label><input id="website" type="url" placeholder="https://nonprofit.org" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Compliance notices? *</label><textarea id="compliance_notes" rows="2" placeholder="e.g. CTR 3.2%, single-word flagged" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 text-[#F9F8F6] placeholder:text-white/40"></textarea></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
+   } else {
+     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — activation mode. $0 to $10k utilization.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website + donation flow link *</label><input id="website" type="url" placeholder="https://nonprofit.org/donate" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Conversion tracking + thank-you page? *</label><select id="has_tracking" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option>Yes</option><option>No</option><option>Partial</option></select></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
+   }
+ } else if(service==='E-Commerce & Custom Web'){
+   const plat=state.platform||'';
+   if(plat==='Shopify'){
+     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — Shopify. Theme + trust + speed, not ads.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Theme + apps stack?</label><input id="theme_stack" placeholder="Dawn, Klaviyo, Rebuy" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Biggest leak? *</label><select id="leak" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option>Above fold — no clear CTA/offer</option><option>Product page — trust/specs</option><option>Checkout — abandonment</option></select></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
+   } else {
+     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — Woo/Custom. Hosting + speed + custom checkout.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Hosting + page speed? *</label><input id="hosting_speed" placeholder="Kinsta, 4.2s mobile" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Custom work needed?</label><textarea id="custom_need" rows="2" placeholder="Custom checkout, subscription, etc." class="w-full p-4 rounded-xl border border-white/20 bg-white/10 text-[#F9F8F6] placeholder:text-white/40"></textarea></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
+   }
+ } else {
+   html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — consultancy. Decision flow + budget reality.</p><div class="space-y-4"><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Timeline to start? *</label><select id="timeline" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option>Now</option><option>2-4 weeks</option><option>Exploring</option></select></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Decision maker? *</label><select id="decision_maker" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option>You</option><option>You + partner</option><option>Team/Board</option></select></div></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website / Portfolio link *</label><input id="website" type="url" placeholder="https://yourcompany.com" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
+ }
+ dynamic.innerHTML=html; attachInputListeners(); restoreValues(); nextBtn.classList.remove('hidden'); submitBtn.classList.add('hidden');
+}
+
+function renderStep4(){
+ current=4; updateProgress(); nextBtn.classList.add('hidden'); submitBtn.classList.remove('hidden');
+ dynamic.innerHTML=`<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Final step — where should I send your personalized breakdown?</p><div class="space-y-4"><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Your Name *</label><input id="name" placeholder="Alex Mercer" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Work Email *</label><input id="email" type="email" placeholder="alex@company.com" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Anything else to add?</label><textarea id="notes" rows="3" placeholder="Context, constraints, prior agency experience..." class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] text-[#0A0A0B]"></textarea></div><p id="err4" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div></div>`;
+ attachInputListeners(); restoreValues();
+}
+
+function validateStep2(){
+ const err=document.getElementById('err2');
+ if(service==='Growth & Performance Marketing'){
+   if(!document.getElementById('ad_spend').value){ err.textContent='Please select your monthly ad spend.'; err.classList.remove('hidden'); return false; }
+   const b=document.getElementById('breaking_acq').value;
+   if(isVague(b)){ err.textContent='Please provide at least 10 meaningful characters describing what is breaking.'; err.classList.remove('hidden'); return false; }
+ } else if(service==='Google Ad Grants'){
+   if(!document.getElementById('nonprofit_status').value || !document.getElementById('grants_status').value){ err.textContent='Please complete your nonprofit and grant statuses.'; err.classList.remove('hidden'); return false; }
+ } else if(service==='E-Commerce & Custom Web'){
+   if(!document.getElementById('platform').value || !document.getElementById('cvr').value){ err.textContent='Please select your platform and enter CVR metrics.'; err.classList.remove('hidden'); return false; }
+ } else {
+   const b=document.getElementById('biz_sentence').value;
+   if(isVague(b)){ err.textContent='Please describe your business in at least 10 characters.'; err.classList.remove('hidden'); return false; }
+   if(!document.getElementById('team_growth').value){ err.textContent='Please select your team size & growth owner.'; err.classList.remove('hidden'); return false; }
+ }
+ err.classList.add('hidden'); return true;
+}
+
+function validateStep3(){
+ const err=document.getElementById('err3');
+ const web=document.getElementById('website').value;
+ if(!isValidUrl(web)){ err.textContent='Please enter a valid website URL (e.g. https://company.com).'; err.classList.remove('hidden'); return false; }
+ const sel=dynamic.querySelectorAll('select');
+ for(let s of sel){ if(!s.value){ err.textContent='Please answer all required dropdown selections.'; err.classList.remove('hidden'); return false; } }
+ err.classList.add('hidden'); return true;
+}
+
+function validateStep4(){
+ const err=document.getElementById('err4');
+ const name=document.getElementById('name').value.trim();
+ const email=document.getElementById('email').value.trim();
+ if(!name || name.length<2){ err.textContent='Please provide your name.'; err.classList.remove('hidden'); return false; }
+ if(!isValidEmail(email)){ err.textContent='Please provide a valid work email address.'; err.classList.remove('hidden'); return false; }
+ err.classList.add('hidden'); return true;
+}
+
+nextBtn.addEventListener('click', ()=>{
+ if(current===1){
+   if(!service){ err1.classList.remove('hidden'); return; }
+   renderStep2();
+ } else if(current===2){
+   if(!validateStep2()) return;
+   userBubble(`Completed Step 2 Deep Dive`);
+   setTimeout(()=>{ assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 3 of 4 — Scoping & Constraints</span><br>Got your economics and core bottlenecks. Let's look at your stack and timelines.`); renderStep3(); },300);
+ } else if(current===3){
+   if(!validateStep3()) return;
+   userBubble(`Completed Step 3 Scoping`);
+   setTimeout(()=>{ assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 4 of 4 — Final Details</span><br>Almost done. Where should I route your custom breakdown?`); renderStep4(); },300);
+ }
+});
+
+prevBtn.addEventListener('click', ()=>{
+ if(current===3){ renderStep2(); prevBtn.classList.add('hidden'); }
+ else if(current===4){ renderStep3(); }
+});
+
+changeTrackBtn.addEventListener('click', ()=>{
+ clearState(); current=1; dynamic.innerHTML=''; nav.classList.add('hidden');
+ document.querySelectorAll('.card').forEach(c=>c.classList.remove('card-active'));
+ updateProgress();
+});
+
+submitBtn.addEventListener('click', ()=>{
+ if(!validateStep4()) return;
+ userBubble(`Submitted final details.`);
+ 
+ const summaryText = Object.entries(state).map(([k,v]) => `${k.toUpperCase()}: ${Array.isArray(v)?v.join(', '):v}`).join('\n');
+ 
+ const form = document.createElement('form');
+ form.method = 'POST';
+ form.action = 'https://formsubmit.co/hjbehari@gmail.com';
+ form.target = '_hiddenIframe';
+ 
+ const addField = (name, val) => {
+   const input = document.createElement('input');
+   input.type = 'hidden';
+   input.name = name;
+   input.value = val;
+   form.appendChild(input);
+ };
+
+ addField('_subject', `New Intake Submission: ${service} (${state.name || 'Anonymous'})`);
+ addField('_template', 'table');
+ addField('_captcha', 'false');
+ 
+ for(const [k, v] of Object.entries(state)){
+   addField(k, Array.isArray(v)?v.join(', '):v);
+ }
+ 
+ let iframe = document.getElementById('_hiddenIframe');
+ if(!iframe){
+   iframe = document.createElement('iframe');
+   iframe.id = '_hiddenIframe';
+   iframe.name = '_hiddenIframe';
+   iframe.style.display = 'none';
+   document.body.appendChild(iframe);
+ }
+ 
+ document.body.appendChild(form);
+ form.submit();
+ document.body.removeChild(form);
+
+ chat.classList.add('hidden');
+ dynamic.classList.add('hidden');
+ nav.classList.add('hidden');
+ step1Cards.classList.add('hidden');
+ success.classList.remove('hidden');
+
+ document.getElementById('summaryBox').textContent = summaryText;
+ document.getElementById('personalizedNext').innerHTML = `<h3 class="satoshi font-bold text-[16px] text-[#0A0A0B]">Next steps for ${service}:</h3><p class="text-[13px] text-[#0A0A0B]/70 leading-6">I am reviewing your metrics for <b>${state.website || 'your project'}</b>. You'll receive a detailed teardown directly at <b>${state.email}</b> within 24 hours.</p>`;
+ clearState();
+});
+
+document.getElementById('copyBtn').addEventListener('click', ()=>{
+ navigator.clipboard.writeText(document.getElementById('summaryBox').textContent);
+ document.getElementById('copyBtn').textContent='Copied ✓';
+ setTimeout(()=>document.getElementById('copyBtn').textContent='Copy summary',2000);
+});
+
+document.getElementById('newBtn').addEventListener('click', ()=>{
+ location.reload();
+});
+
+window.addEventListener('DOMContentLoaded', ()=>{
+ try{
+   const saved=localStorage.getItem('discovery_palette_v3');
+   if(saved){
+     const data=JSON.parse(saved);
+     if(data.service && data.current>1){
+       service=data.service; state=data.state||{}; current=data.current;
+       document.querySelectorAll('.card').forEach(c=>{ if(c.dataset.service===service) c.classList.add('card-active'); });
+       if(current===2) renderStep2();
+       else if(current===3) renderStep3();
+       else if(current===4) renderStep4();
+     }
+   }
+ }catch(e){}
+});
+</script>
+</body>
+</html>
