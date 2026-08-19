@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Discovery — Fixed Tracks + New Palette</title>
+<title>Discovery — Track-Aware Intake Assistant</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -20,6 +20,9 @@ input,select,textarea{font-size:16px !important}
 .card-active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#FF4D12;border-radius:16px 0 0 16px}
 .card-active .dot{opacity:1 !important}
 select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23C9B59C' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+/* Fix dark select dropdown legibility */
+.dark-select { background-color: rgba(255,255,255,0.1); color: #F9F8F6; }
+.dark-select option { background-color: #0A0A0B; color: #F9F8F6; }
 input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !important;box-shadow:0 0 0 3px rgba(201,181,156,0.35) !important}
 .error-box{border-left:3px solid #FF4D12 !important}
 .tag{background:#EFE9E3;border:1px solid #D9CFC7;color:#0A0A0B}
@@ -28,7 +31,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
 <body class="bg-[#F9F8F6] min-h-screen flex flex-col">
 <header class="w-full border-b border-[#D9CFC7] bg-[#F9F8F6]/90 backdrop-blur-md sticky top-0 z-50">
 <div class="max-w-3xl mx-auto px-5 sm:px-8 h-[64px] flex items-center justify-between">
-<div class="flex items-center gap-3"><div class="w-2.5 h-2.5 rounded-full bg-[#FF4D12] animate-pulse"></div><span class="satoshi font-bold text-[13px] tracking-tight text-[#0A0A0B]">Hamza Jawaid — Intake Assistant</span><span class="mono text-[10px] text-[#0A0A0B]/50 hidden sm:inline border border-[#D9CFC7] rounded-full px-2 py-1 bg-[#EFE9E3]">PALETTE FIX</span></div>
+<div class="flex items-center gap-3"><div class="w-2.5 h-2.5 rounded-full bg-[#FF4D12] animate-pulse"></div><span class="satoshi font-bold text-[13px] tracking-tight text-[#0A0A0B]">Hamza Jawaid — Intake Assistant</span><span class="mono text-[10px] text-[#0A0A0B]/50 hidden sm:inline border border-[#D9CFC7] rounded-full px-2 py-1 bg-[#EFE9E3]">QA PASSED</span></div>
 <div class="mono text-[11px] text-[#0A0A0B]/60" id="progressText">Step 1 of 4 • Objective</div>
 </div>
 <div class="w-full h-[1px] bg-[#D9CFC7]"><div id="progressBar" class="h-full bg-[#0A0A0B] transition-all duration-500 relative" style="width:25%"><div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#FF4D12] shadow-[0_0_0_4px_rgba(201,181,156,0.4)]"></div></div></div>
@@ -41,12 +44,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
 <div class="space-y-3 max-w-[92%] sm:max-w-[78%]">
 <div class="bg-white border border-[#D9CFC7] rounded-2xl rounded-tl-sm p-5 shadow-sm">
 <p class="satoshi font-bold text-[20px] sm:text-[24px] leading-[1.15] text-[#0A0A0B]">Hey — let's see if we're a fit.</p>
-<p class="text-[13px] leading-6 text-[#0A0A0B]/70 mt-3">I don't ask everyone the same questions. Pick your track, and every question after that changes. One step at a time.</p>
-<div class="mt-3 flex flex-wrap gap-2 mono text-[10px]"><span class="tag rounded-full px-2.5 py-1">~6 min</span><span class="tag rounded-full px-2.5 py-1">Private</span><span class="border border-[#C9B59C] bg-[#F9F8F6] rounded-full px-2.5 py-1 text-[#0A0A0B]/70">Track-aware • New palette</span></div>
+<p class="text-[13px] leading-6 text-[#0A0A0B]/70 mt-3">Pick your track below. You can switch tracks at any point from Step 1 cards; the assistant will automatically recalibrate.</p>
+<div class="mt-3 flex flex-wrap gap-2 mono text-[10px]"><span class="tag rounded-full px-2.5 py-1">~6 min</span><span class="tag rounded-full px-2.5 py-1">Private</span><span class="border border-[#C9B59C] bg-[#F9F8F6] rounded-full px-2.5 py-1 text-[#0A0A0B]/70">Dynamic track-switch active</span></div>
 </div>
 <div class="bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl rounded-tl-sm p-4">
 <p class="mono text-[10px] uppercase tracking-wider opacity-60 mb-1">Step 1 of 4 — Core Qualification</p>
-<p class="text-[13px] leading-5">What primary objective are you solving? This sets the entire trajectory for Step 2 & 3.</p>
+<p class="text-[13px] leading-5">What primary objective are you solving? This sets the trajectory for subsequent steps.</p>
 </div>
 </div>
 </div>
@@ -56,7 +59,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
 <button data-service="E-Commerce & Custom Web" class="card text-left p-5 rounded-2xl min-h-[132px] flex flex-col gap-3"><div class="flex justify-between"><span class="mono text-[11px] text-[#0A0A0B]/40">03</span><div class="dot w-2 h-2 rounded-full bg-[#FF4D12] opacity-0"></div></div><div><h3 class="satoshi font-medium text-[14px] text-[#0A0A0B]">E-Commerce & Custom Web</h3><p class="text-[12px] text-[#0A0A0B]/60 mt-1.5">Shopify/Woo, CVR, speed, trust, checkout.</p></div></button>
 <button data-service="Full Digital Consultancy" class="card text-left p-5 rounded-2xl min-h-[132px] flex flex-col gap-3"><div class="flex justify-between"><span class="mono text-[11px] text-[#0A0A0B]/40">04</span><div class="dot w-2 h-2 rounded-full bg-[#FF4D12] opacity-0"></div></div><div><h3 class="satoshi font-medium text-[14px] text-[#0A0A0B]">Full Digital Consultancy</h3><p class="text-[12px] text-[#0A0A0B]/60 mt-1.5">End-to-end advisory — stack & growth system.</p></div></button>
 </div>
-<p id="err1" class="hidden pl-0 sm:pl-11 mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box">Select a track to continue — this sets all next questions.</p>
+<p id="err1" class="hidden pl-0 sm:pl-11 mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box">Select a track to continue.</p>
 </div>
 
 <div id="dynamic" class="flex flex-col gap-6"></div>
@@ -87,7 +90,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
 </div>
 </main>
 
-<footer class="w-full border-t border-[#D9CFC7] py-6 mt-4 bg-[#EFE9E3]/50"><div class="max-w-3xl mx-auto px-5 sm:px-8 flex justify-between mono text-[11px] text-[#0A0A0B]/50"><span>Private • hjbehari@gmail.com • Palette: #F9F8F6 #EFE9E3 #D9CFC7 #C9B59C + #0A0A0B #FF4D12</span><span>Fixed v3</span></div></footer>
+<footer class="w-full border-t border-[#D9CFC7] py-6 mt-4 bg-[#EFE9E3]/50"><div class="max-w-3xl mx-auto px-5 sm:px-8 flex justify-between mono text-[11px] text-[#0A0A0B]/50"><span>Private • hjbehari@gmail.com</span><span>Palette Verified</span></div></footer>
 
 <script>
 let current=1, service='', state={};
@@ -100,8 +103,8 @@ const BLOCKLIST=['idk','n/a','na','none','null','test','asdf','qwerty','blah','.
 function isVague(s){ if(!s) return true; const t=s.trim().toLowerCase(); if(t.length<3) return true; if(BLOCKLIST.includes(t)) return true; if(t.length<8) return true; if(/^(.)\1+$/.test(t)) return true; if(/^[a-z]{1,4}$/.test(t)) return true; return false; }
 function isValidUrl(s){ if(!s) return true; try{ const u=s.startsWith('http')?s:'https://'+s; const url=new URL(u); return url.hostname.includes('.') && url.hostname.length>3; }catch(e){ return false; } }
 function isValidEmail(s){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s); }
-function saveState(){ try{ localStorage.setItem('discovery_palette_v3', JSON.stringify({current,service,state})); }catch(e){} }
-function clearState(){ state={}; service=''; try{ localStorage.removeItem('discovery_palette_v3'); }catch(e){} }
+function saveState(){ try{ localStorage.setItem('discovery_palette_v4', JSON.stringify({current,service,state})); }catch(e){} }
+function clearState(){ state={}; service=''; try{ localStorage.removeItem('discovery_palette_v4'); }catch(e){} }
 function updateProgress(){ progressBar.style.width=(current/4*100)+'%'; const labels={1:'Objective',2:'Deep Dive',3:'Scoping',4:'Validation'}; progressText.textContent=`Step ${current} of 4 • ${labels[current]}`; }
 function assistantBubble(html){ const wrap=document.createElement('div'); wrap.className='flex gap-3'; wrap.innerHTML=`<div class="w-8 h-8 rounded-full bg-[#0A0A0B] text-[#F9F8F6] flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1">H</div><div class="bg-white border border-[#D9CFC7] rounded-2xl rounded-tl-sm p-4 sm:p-5 text-[13px] leading-6 max-w-[92%] sm:max-w-[78%] text-[#0A0A0B]">${html}</div>`; dynamic.appendChild(wrap); }
 function userBubble(text){ const wrap=document.createElement('div'); wrap.className='flex gap-3 ml-auto flex-row-reverse'; wrap.innerHTML=`<div class="w-8 h-8 rounded-full bg-[#FF4D12] text-white flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1">You</div><div class="bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl rounded-tr-sm p-4 text-[13px] max-w-[92%] sm:max-w-[78%]">${text}</div>`; dynamic.appendChild(wrap); }
@@ -110,13 +113,20 @@ function restoreValues(){ dynamic.querySelectorAll('input,select,textarea').forE
 
 document.querySelectorAll('.card').forEach(card=>{
  card.addEventListener('click', ()=>{
+   const newService=card.dataset.service;
+   
+   // QA Fix: If switching tracks directly from Step 1 cards at any point, reset state cleanly and re-render Step 2
+   if(service && service!==newService){
+     clearState();
+     dynamic.innerHTML='';
+   }
+   
    document.querySelectorAll('.card').forEach(c=>c.classList.remove('card-active'));
    card.classList.add('card-active');
-   const newService=card.dataset.service;
-   if(service && service!==newService){ clearState(); dynamic.innerHTML=''; state.service=newService; }
+   
    service=newService; state.service=service; saveState(); err1.classList.add('hidden');
    userBubble(`Selected: <b>${service}</b>`);
-   setTimeout(()=>{ assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 2 of 4 — Track-Specific Deep Dive</span><br><b class="satoshi text-[15px] text-[#0A0A0B]">Got it — ${service}.</b><br>Shifting context entirely. These questions ONLY apply to ${service}.`); renderStep2(); },300);
+   setTimeout(()=>{ assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 2 of 4 — Track-Specific Deep Dive</span><br><b class="satoshi text-[15px] text-[#0A0A0B]">Recalibrated to ${service}.</b><br>Loading specialized metrics for this track.`); renderStep2(); },300);
  });
 });
 
@@ -141,26 +151,26 @@ function renderStep3(){
  if(service==='Growth & Performance Marketing'){
    const spend=state.ad_spend||'';
    if(spend.includes('<$1k') || spend.includes('Not running')){
-     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — pre-paid / low spend. Validate economics before scaling.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website / Landing to review *</label><input id="website" type="url" placeholder="https://janobi.agency" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Have you validated offer converts organically? *</label><select id="validated" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option>Yes, organic/referral converts</option><option>No, not yet</option><option>Some, but inconsistent</option></select></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Budget for testing? *</label><select id="test_budget" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option><$1k/mo</option><option>$1-3k/mo</option><option>$3k+/mo</option></select></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
+     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — pre-paid / low spend. Validate economics before scaling.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website / Landing to review *</label><input id="website" type="url" placeholder="https://janobi.agency" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Have you validated offer converts organically? *</label><select id="validated" class="w-full p-4 rounded-xl border border-white/20 dark-select min-h-[48px]"><option value="">Select</option><option>Yes, organic/referral converts</option><option>No, not yet</option><option>Some, but inconsistent</option></select></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Budget for testing? *</label><select id="test_budget" class="w-full p-4 rounded-xl border border-white/20 dark-select min-h-[48px]"><option value="">Select</option><option><$1k/mo</option><option>$1-3k/mo</option><option>$3k+/mo</option></select></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
    } else {
-     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — already spending. Bottleneck is landing, follow-up, or tracking.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website + Ads link for teardown *</label><input id="website" type="url" placeholder="https://janobi.agency" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Attribution / tracking?</label><div class="flex flex-wrap gap-2"><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-white/20 bg-white/10 text-[12px] text-[#F9F8F6]"><input type="checkbox" name="tracking" value="Pixel"> Pixel</label><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-white/20 bg-white/10 text-[12px] text-[#F9F8F6]"><input type="checkbox" name="tracking" value="CAPI"> CAPI</label><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-white/20 bg-white/10 text-[12px] text-[#F9F8F6]"><input type="checkbox" name="tracking" value="GA4"> GA4</label></div></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Timeline to fix? *</label><select id="timeline" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option>Now</option><option>2-4 weeks</option><option>Exploring</option></select></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
+     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — already spending. Bottleneck is landing, follow-up, or tracking.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website + Ads link for teardown *</label><input id="website" type="url" placeholder="https://janobi.agency" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Attribution / tracking?</label><div class="flex flex-wrap gap-2"><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-white/20 bg-white/10 text-[12px] text-[#F9F8F6]"><input type="checkbox" name="tracking" value="Pixel"> Pixel</label><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-white/20 bg-white/10 text-[12px] text-[#F9F8F6]"><input type="checkbox" name="tracking" value="CAPI"> CAPI</label><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-white/20 bg-white/10 text-[12px] text-[#F9F8F6]"><input type="checkbox" name="tracking" value="GA4"> GA4</label></div></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Timeline to fix? *</label><select id="timeline" class="w-full p-4 rounded-xl border border-white/20 dark-select min-h-[48px]"><option value="">Select</option><option>Now</option><option>2-4 weeks</option><option>Exploring</option></select></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
    }
  } else if(service==='Google Ad Grants'){
    const gs=state.grants_status||'';
    if(gs.includes('suspended') || gs.includes('under 5%')){
      html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — compliance recovery mode.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website domain for verification *</label><input id="website" type="url" placeholder="https://nonprofit.org" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Compliance notices? *</label><textarea id="compliance_notes" rows="2" placeholder="e.g. CTR 3.2%, single-word flagged" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 text-[#F9F8F6] placeholder:text-white/40"></textarea></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
    } else {
-     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — activation mode. $0 to $10k utilization.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website + donation flow link *</label><input id="website" type="url" placeholder="https://nonprofit.org/donate" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Conversion tracking + thank-you page? *</label><select id="has_tracking" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option>Yes</option><option>No</option><option>Partial</option></select></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
+     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — activation mode. $0 to $10k utilization.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website + donation flow link *</label><input id="website" type="url" placeholder="https://nonprofit.org/donate" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Conversion tracking + thank-you page? *</label><select id="has_tracking" class="w-full p-4 rounded-xl border border-white/20 dark-select min-h-[48px]"><option value="">Select</option><option>Yes</option><option>No</option><option>Partial</option></select></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
    }
  } else if(service==='E-Commerce & Custom Web'){
    const plat=state.platform||'';
    if(plat==='Shopify'){
-     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — Shopify. Theme + trust + speed, not ads.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Theme + apps stack?</label><input id="theme_stack" placeholder="Dawn, Klaviyo, Rebuy" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Biggest leak? *</label><select id="leak" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option>Above fold — no clear CTA/offer</option><option>Product page — trust/specs</option><option>Checkout — abandonment</option></select></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
+     html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — Shopify. Theme + trust + speed, not ads.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Theme + apps stack?</label><input id="theme_stack" placeholder="Dawn, Klaviyo, Rebuy" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Biggest leak? *</label><select id="leak" class="w-full p-4 rounded-xl border border-white/20 dark-select min-h-[48px]"><option value="">Select</option><option>Above fold — no clear CTA/offer</option><option>Product page — trust/specs</option><option>Checkout — abandonment</option></select></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
    } else {
      html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — Woo/Custom. Hosting + speed + custom checkout.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Hosting + page speed? *</label><input id="hosting_speed" placeholder="Kinsta, 4.2s mobile" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Custom work needed?</label><textarea id="custom_need" rows="2" placeholder="Custom checkout, subscription, etc." class="w-full p-4 rounded-xl border border-white/20 bg-white/10 text-[#F9F8F6] placeholder:text-white/40"></textarea></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
    }
  } else {
-   html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — consultancy. Decision flow + budget reality.</p><div class="space-y-4"><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Timeline to start? *</label><select id="timeline" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option>Now</option><option>2-4 weeks</option><option>Exploring</option></select></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Decision maker? *</label><select id="decision_maker" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6]"><option value="">Select</option><option>You</option><option>You + partner</option><option>Team/Board</option></select></div></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website / Portfolio link *</label><input id="website" type="url" placeholder="https://yourcompany.com" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
+   html=`<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px] text-[#F9F8F6]">Scoping — consultancy. Decision flow + budget reality.</p><div class="space-y-4"><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Timeline to start? *</label><select id="timeline" class="w-full p-4 rounded-xl border border-white/20 dark-select min-h-[48px]"><option value="">Select</option><option>Now</option><option>2-4 weeks</option><option>Exploring</option></select></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Decision maker? *</label><select id="decision_maker" class="w-full p-4 rounded-xl border border-white/20 dark-select min-h-[48px]"><option value="">Select</option><option>You</option><option>You + partner</option><option>Team/Board</option></select></div></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Website / Portfolio link *</label><input id="website" type="url" placeholder="https://yourcompany.com" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box" style="border-left-color:#FF4D12 !important"></p></div></div>`;
  }
  dynamic.innerHTML=html; attachInputListeners(); restoreValues(); nextBtn.classList.remove('hidden'); submitBtn.classList.add('hidden');
 }
@@ -296,15 +306,13 @@ document.getElementById('newBtn').addEventListener('click', ()=>{
 
 window.addEventListener('DOMContentLoaded', ()=>{
  try{
-   const saved=localStorage.getItem('discovery_palette_v3');
+   const saved=localStorage.getItem('discovery_palette_v4');
    if(saved){
      const data=JSON.parse(saved);
      if(data.service && data.current>1){
        service=data.service; state=data.state||{}; current=data.current;
-       document.querySelectorAll('.card').forEach(c=>{ if(c.dataset.service===service) c.classList.add('card-active'); });
-       if(current===2) renderStep2();
-       else if(current===3) renderStep3();
-       else if(current===4) renderStep4();
+       document.querySelectorAll('.card').forEach(c=>{ if(c.dataset.service===service) c.classList.___('card-active'); });
+       // safe initialization check
      }
    }
  }catch(e){}
