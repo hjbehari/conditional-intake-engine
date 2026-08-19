@@ -51,6 +51,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
       </div>
     </div>
 
+    <!-- Step 1 Cards Container -->
     <div id="step1-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"></div>
     <p id="err1" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box">Please select an objective track above to proceed.</p>
     <div id="dynamic" class="flex flex-col gap-5"></div>
@@ -505,7 +506,7 @@ window.addEventListener('DOMContentLoaded', () => {
   prevBtn.addEventListener('click', () => {
     if (isTransitioning) return;
     if (current === 3) { 
-      renderStep2();
+      renderStep2(); 
     } else if (current === 4) { 
       renderStep3(); 
     }
@@ -534,15 +535,21 @@ window.addEventListener('DOMContentLoaded', () => {
       const flatPayload = { service, _subject: `Intake Submission: ${service}` };
       Object.values(state.branches).forEach(branchObj => Object.assign(flatPayload, branchObj));
 
-      const endpoint = 'https://script.google.com/macros/s/AKfycbz5XRKfxRe750m9SjPCvQtd62wuL_XX3PHJbQHFh3cgPYTMSMMREDyXmU9gWCB3mFk/exec';
+      // Connected Endpoint
+      const endpoint = 'https://script.google.com/macros/s/AKfycbynlWhaHJ3KV1Ft1dwKN_NzNgq9icyL4R6cF0Xf3f0/dev';
       
       try {
-        await fetch(endpoint, {
+        const response = await fetch(endpoint, {
           method: 'POST',
-          mode: 'no-cors', // standard workaround for Google Apps Script Web Apps
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(flatPayload)
         });
+
+        const resData = await response.json();
+
+        if (!resData.success) {
+          throw new Error(resData.error || 'Backend validation rejected payload.');
+        }
 
         const chat = document.getElementById('chat');
         const nav = document.getElementById('nav');
@@ -581,7 +588,7 @@ window.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = originalText;
         const err4 = document.getElementById('err4');
         if (err4) {
-          err4.textContent = 'Transmission failed. Please check your connection and try again.';
+          err4.textContent = err.message || 'Transmission failed. Please check your connection and try again.';
           err4.classList.remove('hidden');
         }
         console.error('Submission error:', err);
