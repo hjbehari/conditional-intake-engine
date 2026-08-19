@@ -153,43 +153,42 @@ function purgeDynamic(container) {
   container.innerHTML = '';
 }
 
-// Rebuilds the Step 1 cards markup and binds click handlers.
+// Data-driven track configuration
+const TRACKS = [
+  { id: 'growth', title: 'Growth & Performance Marketing', desc: 'Ad spend, CAC/ROAS', badge: 'Track 01' },
+  { id: 'grants', title: 'Google Ad Grants', desc: '501c3 status, CTR', badge: 'Track 02' },
+  { id: 'ecom', title: 'E-Commerce & Custom Web', desc: 'Platform, friction points', badge: 'Track 03' },
+  { id: 'consult', title: 'Consultancy & Advisory', desc: 'Business summary', badge: 'Track 04' }
+];
+
+// Rebuilds the Step 1 cards markup and binds click handlers using TRACKS config.
 function renderStep1() {
   const container = document.getElementById('step1-cards');
   const dynamic = document.getElementById('dynamic');
-  const nav = document.getElementById('nav');
   if (!container) return;
-  // Reset container content
-  container.innerHTML = `
-    <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Growth & Performance Marketing">
+
+  // Clear existing
+  container.innerHTML = '';
+
+  TRACKS.forEach(track => {
+    const card = document.createElement('div');
+    card.className = 'card p-5 rounded-2xl cursor-pointer flex flex-col justify-between';
+    card.setAttribute('data-service', track.title);
+    card.setAttribute('data-track-id', track.id);
+
+    card.innerHTML = `
       <div>
-        <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 01</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
-        <h3 class="satoshi font-bold text-[15px]">Growth & Performance Marketing</h3>
-        <p class="mt-2 text-[13px] text-[#0A0A0B]/70">Ad spend, CAC/ROAS</p>
+        <div class="flex items-center justify-between mb-3">
+          <span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">${track.badge}</span>
+          <div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div>
+        </div>
+        <h3 class="satoshi font-bold text-[15px]">${track.title}</h3>
+        <p class="mt-2 text-[13px] text-[#0A0A0B]/70">${track.desc}</p>
       </div>
-    </div>
-    <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Google Ad Grants">
-      <div>
-        <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 02</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
-        <h3 class="satoshi font-bold text-[15px]">Google Ad Grants</h3>
-        <p class="mt-2 text-[13px] text-[#0A0A0B]/70">501c3 status, CTR</p>
-      </div>
-    </div>
-    <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="E-Commerce & Custom Web">
-      <div>
-        <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 03</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
-        <h3 class="satoshi font-bold text-[15px]">E-Commerce & Custom Web</h3>
-        <p class="mt-2 text-[13px] text-[#0A0A0B]/70">Platform, friction points</p>
-      </div>
-    </div>
-    <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Consultancy & Advisory">
-      <div>
-        <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 04</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
-        <h3 class="satoshi font-bold text-[15px]">Consultancy & Advisory</h3>
-        <p class="mt-2 text-[13px] text-[#0A0A0B]/70">Business summary</p>
-      </div>
-    </div>
-  `;
+    `;
+
+    container.appendChild(card);
+  });
 
   // Ensure the container is visible
   container.classList.remove('hidden');
@@ -197,19 +196,28 @@ function renderStep1() {
 
   // (Re)bind click handlers for the newly created cards
   container.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', () => {
-      const newService = card.dataset.service;
-      if (service !== newService) { clearState(); service = newService; state.service = service; saveState(); }
+    // Remove any previous listeners (defensive)
+    const cloned = card.cloneNode(true);
+    card.parentNode.replaceChild(cloned, card);
+    cloned.addEventListener('click', () => {
+      const newService = cloned.dataset.service;
+      // Reset branch data but do not re-render step1 (we're already in click flow)
+      state.branches = {};
+      service = newService;
+      state.service = service;
+      current = 1;
+      saveState();
+
       // remove active from any existing cards then set on clicked
-      container.querySelectorAll('.card').forEach(c => c.classList.remove('card-active'));
-      card.classList.add('card-active');
+      const cont = document.getElementById('step1-cards'); if (cont) cont.querySelectorAll('.card').forEach(c => c.classList.remove('card-active'));
+      cloned.classList.add('card-active');
       const err1 = document.getElementById('err1'); if (err1) err1.classList.add('hidden');
       if (dynamic) userBubble(`Selected: ${service}`, dynamic);
       setTimeout(() => {
         if (dynamic) assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 2 of 4 — Deep Dive</span><br><b class="satoshi text-[15px] text-[#0A0A0B]">Recalibrating questions for ${service}</b>`, dynamic);
         // hide step1 cards and render step 2
-        container.classList.add('hidden');
-        renderStep2(dynamic, container, document.getElementById('nav'), document.getElementById('prevBtn'), document.getElementById('changeTrackBtn'), document.getElementById('progressBar'), document.getElementById('progressText'));
+        const cont2 = document.getElementById('step1-cards'); if (cont2) cont2.classList.add('hidden');
+        renderStep2(dynamic, document.getElementById('step1-cards'), document.getElementById('nav'), document.getElementById('prevBtn'), document.getElementById('changeTrackBtn'), document.getElementById('progressBar'), document.getElementById('progressText'));
       }, 600);
     });
   });
