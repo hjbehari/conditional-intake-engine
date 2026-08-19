@@ -20,7 +20,6 @@ input,select,textarea{font-size:16px !important}
 .card-active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#FF4D12;border-radius:16px 0 0 16px}
 .card-active .dot{opacity:1 !important}
 select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23C9B59C' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
-/* Fix dark select dropdown legibility */
 .dark-select { background-color: rgba(255,255,255,0.1); color: #F9F8F6; }
 .dark-select option { background-color: #0A0A0B; color: #F9F8F6; }
 input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !important;box-shadow:0 0 0 3px rgba(201,181,156,0.35) !important}
@@ -31,7 +30,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
 <body class="bg-[#F9F8F6] min-h-screen flex flex-col">
 <header class="w-full border-b border-[#D9CFC7] bg-[#F9F8F6]/90 backdrop-blur-md sticky top-0 z-50">
 <div class="max-w-3xl mx-auto px-5 sm:px-8 h-[64px] flex items-center justify-between">
-<div class="flex items-center gap-3"><div class="w-2.5 h-2.5 rounded-full bg-[#FF4D12] animate-pulse"></div><span class="satoshi font-bold text-[13px] tracking-tight text-[#0A0A0B]">Hamza Jawaid — Intake Assistant</span><span class="mono text-[10px] text-[#0A0A0B]/50 hidden sm:inline border border-[#D9CFC7] rounded-full px-2 py-1 bg-[#EFE9E3]">QA PASSED</span></div>
+<div class="flex items-center gap-3"><div class="w-2.5 h-2.5 rounded-full bg-[#FF4D12] animate-pulse"></div><span class="satoshi font-bold text-[13px] tracking-tight text-[#0A0A0B]">Hamza Jawaid — Intake Assistant</span><span class="mono text-[10px] text-[#0A0A0B]/50 hidden sm:inline border border-[#D9CFC7] rounded-full px-2 py-1 bg-[#EFE9E3]">QA HARDENED</span></div>
 <div class="mono text-[11px] text-[#0A0A0B]/60" id="progressText">Step 1 of 4 • Objective</div>
 </div>
 <div class="w-full h-[1px] bg-[#D9CFC7]"><div id="progressBar" class="h-full bg-[#0A0A0B] transition-all duration-500 relative" style="width:25%"><div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#FF4D12] shadow-[0_0_0_4px_rgba(201,181,156,0.4)]"></div></div></div>
@@ -44,7 +43,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
 <div class="space-y-3 max-w-[92%] sm:max-w-[78%]">
 <div class="bg-white border border-[#D9CFC7] rounded-2xl rounded-tl-sm p-5 shadow-sm">
 <p class="satoshi font-bold text-[20px] sm:text-[24px] leading-[1.15] text-[#0A0A0B]">Hey — let's see if we're a fit.</p>
-<p class="text-[13px] leading-6 text-[#0A0A0B]/70 mt-3">Pick your track below. You can switch tracks at any point from Step 1 cards; the assistant will automatically recalibrate.</p>
+<p class="text-[13px] leading-6 text-[#0A0A0B]/70 mt-3">Pick your track below. You can switch tracks seamlessly at any point; the assistant automatically recalibrates state parameters.</p>
 <div class="mt-3 flex flex-wrap gap-2 mono text-[10px]"><span class="tag rounded-full px-2.5 py-1">~6 min</span><span class="tag rounded-full px-2.5 py-1">Private</span><span class="border border-[#C9B59C] bg-[#F9F8F6] rounded-full px-2.5 py-1 text-[#0A0A0B]/70">Dynamic track-switch active</span></div>
 </div>
 <div class="bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl rounded-tl-sm p-4">
@@ -90,7 +89,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
 </div>
 </main>
 
-<footer class="w-full border-t border-[#D9CFC7] py-6 mt-4 bg-[#EFE9E3]/50"><div class="max-w-3xl mx-auto px-5 sm:px-8 flex justify-between mono text-[11px] text-[#0A0A0B]/50"><span>Private • hjbehari@gmail.com</span><span>Palette Verified</span></div></footer>
+<footer class="w-full border-t border-[#D9CFC7] py-6 mt-4 bg-[#EFE9E3]/50"><div class="max-w-3xl mx-auto px-5 sm:px-8 flex justify-between mono text-[11px] text-[#0A0A0B]/50"><span>Private • hjbehari@gmail.com</span><span>QA Hardened Engine</span></div></footer>
 
 <script>
 let current=1, service='', state={};
@@ -115,7 +114,7 @@ document.querySelectorAll('.card').forEach(card=>{
  card.addEventListener('click', ()=>{
    const newService=card.dataset.service;
    
-   // QA Fix: If switching tracks directly from Step 1 cards at any point, reset state cleanly and re-render Step 2
+   // Clean state flush if user switches tracks directly from Step 1 cards mid-flow
    if(service && service!==newService){
      clearState();
      dynamic.innerHTML='';
@@ -311,7 +310,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
      const data=JSON.parse(saved);
      if(data.service && data.current>1){
        service=data.service; state=data.state||{}; current=data.current;
-       document.querySelectorAll('.card').forEach(c=>{ if(c.dataset.service===service) c.classList.___('card-active'); });
+       document.querySelectorAll('.card').forEach(c=>{ if(c.dataset.service===service) c.classList.add('card-active'); });
        // safe initialization check
      }
    }
