@@ -46,6 +46,58 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
 <p class="text-[13px] leading-6 text-[#0A0A0B]/70 mt-3">Pick your track below. You can switch tracks seamlessly at any point; the assistant automatically recalibrates state parameters.</p>
 <div class="mt-3 flex flex-wrap gap-2 mono text-[10px]"><span class="tag rounded-full px-2.5 py-1">~6 min</span><span class="tag rounded-full px-2.5 py-1">Private</span><span class="border border-[#C9B59C] bg-[#F9F8F6] rounded-full px-2.5 py-1 text-[#0A0A0B]/70">Dynamic track-switch active</span></div>
 </div>
+</div>
+</div>
+
+<div id="step1-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+<div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Growth & Performance Marketing">
+<div><div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 01</span><div class="w-2 h-2 rounded-full bg-[#FF4D12] opacity-0 dot"></div></div><h3 class="satoshi font-bold text-[16px] text-[#0A0A0B] mb-1">Growth & Performance Marketing</h3><p class="text-[13px] text-[#0A0A0B]/70 leading-relaxed">Paid media scale-up, funnel optimization, and unit economics validation.</p></div>
+<div class="mt-4 pt-3 border-t border-[#D9CFC7] flex items-center justify-between mono text-[11px] text-[#0A0A0B]/60"><span>Ad spend, CAC/ROAS</span><span>~2 min</span></div>
+</div>
+<div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Google Ad Grants">
+<div><div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 02</span><div class="w-2 h-2 rounded-full bg-[#FF4D12] opacity-0 dot"></div></div><h3 class="satoshi font-bold text-[16px] text-[#0A0A0B] mb-1">Google Ad Grants</h3><p class="text-[13px] text-[#0A0A0B]/70 leading-relaxed">Nonprofit compliance, structure reconstruction, and conversion tracking.</p></div>
+<div class="mt-4 pt-3 border-t border-[#D9CFC7] flex items-center justify-between mono text-[11px] text-[#0A0A0B]/60"><span>501c3 status, CTR</span><span>~2 min</span></div>
+</div>
+<div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="E-Commerce & Custom Web">
+<div><div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 03</span><div class="w-2 h-2 rounded-full bg-[#FF4D12] opacity-0 dot"></div></div><h3 class="satoshi font-bold text-[16px] text-[#0A0A0B] mb-1">E-Commerce & Custom Web</h3><p class="text-[13px] text-[#0A0A0B]/70 leading-relaxed">High-converting storefronts, custom web apps, and speed optimization.</p></div>
+<div class="mt-4 pt-3 border-t border-[#D9CFC7] flex items-center justify-between mono text-[11px] text-[#0A0A0B]/60"><span>Platform, friction points</span><span>~2 min</span></div>
+</div>
+<div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Consultancy & Advisory">
+<div><div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 04</span><div class="w-2 h-2 rounded-full bg-[#FF4D12] opacity-0 dot"></div></div><h3 class="satoshi font-bold text-[16px] text-[#0A0A0B] mb-1">Consultancy & Advisory</h3><p class="text-[13px] text-[#0A0A0B]/70 leading-relaxed">Strategic growth advisory, executive sparring, and fractional leadership.</p></div>
+<div class="mt-4 pt-3 border-t border-[#D9CFC7] flex items-center justify-between mono text-[11px] text-[#0A0A0B]/60"><span>Business summary</span><span>~2 min</span></div>
+</div>
+</div>
+<p id="err1" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box">Please select an objective track above to proceed.</p>
+
+<div id="dynamic" class="flex flex-col gap-5"></div>
+</div>
+
+<div id="success" class="hidden max-w-3xl mx-auto px-5 sm:px-8 py-10 w-full flex-grow flex flex-col gap-6">
+<div class="bg-white border border-[#D9CFC7] rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-[#0A0A0B] text-white flex items-center justify-center font-bold">✓</div>
+<div><h2 class="satoshi font-bold text-[20px] text-[#0A0A0B]">Assessment package transmitted.</h2><p class="text-[13px] text-[#0A0A0B]/70">Your data has been securely routed for review.</p></div>
+</div>
+<div id="personalizedNext" class="bg-[#F9F8F6] border border-[#D9CFC7] rounded-xl p-5 space-y-2"></div>
+<div class="space-y-2"><div class="flex items-center justify-between"><span class="mono text-[11px] uppercase text-[#0A0A0B]/60">Transmission Summary Payload</span><button id="copyBtn" class="mono text-[11px] text-[#FF4D12] hover:underline">Copy summary</button></div><textarea id="summaryBox" readonly rows="6" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] mono text-[12px] text-[#0A0A0B]"></textarea></div>
+<button id="newBtn" class="w-full py-4 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] satoshi font-bold text-[14px] hover:bg-black/90 transition-colors">Start New Assessment</button>
+</div>
+</div>
+</main>
+
+<footer class="w-full border-t border-[#D9CFC7] py-4 bg-[#F9F8F6] mt-auto">
+<div class="max-w-3xl mx-auto px-5 sm:px-8 flex items-center justify-between text-[11px] mono text-[#0A0A0B]/60">
+<span>hjbehari@gmail.com</span><span>QA Hardened Engine</span>
+</div>
+</footer>
+
+<div id="nav" class="hidden sticky bottom-0 left-0 right-0 bg-[#F9F8F6]/90 backdrop-blur-md border-t border-[#D9CFC7] py-4">
+<div class="max-w-3xl mx-auto px-5 sm:px-8 flex items-center justify-between">
+<div class="flex items-center gap-3"><button id="prevBtn" class="hidden px-4 py-2.5 rounded-xl border border-[#D9CFC7] bg-white text-[13px] satoshi font-bold text-[#0A0A0B] hover:bg-[#F9F8F6]">Back</button><button id="changeTrackBtn" class="hidden px-4 py-2.5 rounded-xl border border-[#D9CFC7] bg-white text-[13px] mono text-[#0A0A0B]/70 hover:bg-[#F9F8F6]">Switch Track</button></div>
+<div class="flex items-center gap-3"><button id="nextBtn" class="px-6 py-2.5 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] text-[13px] satoshi font-bold hover:bg-black/90">Continue</button><button id="submitBtn" class="hidden px-6 py-2.5 rounded-xl bg-[#FF4D12] text-white text-[13px] satoshi font-bold hover:bg-[#FF4D12]/90">Submit Package</button></div>
+</div>
+</div>
+
 <script>
 // --- ENTERPRISE STATE MACHINE ---
 let current = 1, service = '', state = { branches: {} };
@@ -71,7 +123,7 @@ function isVague(val) {
   const t = val.trim().toLowerCase();
   if (t.length < 5) return true;
   if (BLOCKLIST.includes(t)) return true;
-  if (/^(.)\1+$/.test(t)) return true; // e.g. "aaaaa"
+  if (/^(.)\1+$/.test(t)) return true;
   return false;
 }
 
@@ -114,7 +166,6 @@ function updateProgress() {
   progressText.textContent = `Step ${current} of 4 • ${labels[current]}`;
 }
 
-// XSS-Safe Bubble Generators using textContent assignment
 function assistantBubble(htmlContent) {
   const wrap = document.createElement('div');
   wrap.className = 'flex gap-3';
@@ -125,7 +176,7 @@ function assistantBubble(htmlContent) {
   
   const box = document.createElement('div');
   box.className = 'bg-white border border-[#D9CFC7] rounded-2xl rounded-tl-sm p-4 sm:p-5 text-[13px] leading-6 max-w-[92%] sm:max-w-[78%] text-[#0A0A0B]';
-  box.innerHTML = htmlContent; // Safe internal template HTML (static strings)
+  box.innerHTML = htmlContent;
   
   wrap.appendChild(avatar);
   wrap.appendChild(box);
@@ -141,15 +192,14 @@ function userBubble(textString) {
   avatar.textContent = 'You';
   
   const box = document.createElement('div');
-  box.className = 'bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl rounded-tr-sm p-4 text-[13px] max-w-[92%] sm:max-w-[78%]' ;
-  box.textContent = textString; // XSS-Protected text assignment
+  box.className = 'bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl rounded-tr-sm p-4 text-[13px] max-w-[92%] sm:max-w-[78%]';
+  box.textContent = textString;
   
   wrap.appendChild(avatar);
   wrap.appendChild(box);
   dynamic.appendChild(wrap);
 }
 
-// Data Binding & State Isolation
 function getActiveBranchKey() {
   return `step_${current}`;
 }
@@ -196,7 +246,6 @@ function restoreValues() {
   });
 }
 
-// Track Selection Logic
 document.querySelectorAll('.card').forEach(card => {
   card.addEventListener('click', () => {
     const newService = card.dataset.service;
@@ -272,7 +321,6 @@ function renderStep4() {
   saveState();
 }
 
-// Validation Logic
 function validateStep2() {
   const err = document.getElementById('err2');
   const branchData = state.branches['step_2'] || {};
@@ -310,7 +358,6 @@ function validateStep4() {
   return true;
 }
 
-// Event Navigation
 nextBtn.addEventListener('click', () => {
   if (current === 1) {
     if (!service) { err1.classList.remove('hidden'); return; }
@@ -341,7 +388,6 @@ changeTrackBtn.addEventListener('click', () => {
   updateProgress();
 });
 
-// --- TRUE ASYNC SUBMISSION ARCHITECTURE ---
 submitBtn.addEventListener('click', async () => {
   if (!validateStep4()) return;
   userBubble('Submitting assessment package.');
@@ -349,7 +395,6 @@ submitBtn.addEventListener('click', async () => {
   submitBtn.disabled = true;
   submitBtn.textContent = 'Transmitting data...';
 
-  // Aggregate flattened payload safely from isolated state branches
   const flatPayload = { service, _subject: `Intake Submission: ${service}` };
   Object.values(state.branches).forEach(branchObj => {
     Object.assign(flatPayload, branchObj);
@@ -364,7 +409,6 @@ submitBtn.addEventListener('click', async () => {
 
     if (!response.ok) throw new Error('Network response failure');
 
-    // Success Transition
     chat.classList.add('hidden');
     dynamic.classList.add('hidden');
     nav.classList.add('hidden');
@@ -411,7 +455,6 @@ document.getElementById('newBtn').addEventListener('click', () => {
   location.reload();
 });
 
-// Deterministic Hydration Bootstrap on Load
 window.addEventListener('DOMContentLoaded', () => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
