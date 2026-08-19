@@ -54,36 +54,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
       </div>
     </div>
 
-    <div id="step1-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-      <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Growth & Performance Marketing">
-        <div>
-          <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 01</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
-          <h3 class="satoshi font-bold text-[15px]">Growth & Performance Marketing</h3>
-          <p class="mt-2 text-[13px] text-[#0A0A0B]/70">Ad spend, CAC/ROAS</p>
-        </div>
-      </div>
-      <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Google Ad Grants">
-        <div>
-          <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 02</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
-          <h3 class="satoshi font-bold text-[15px]">Google Ad Grants</h3>
-          <p class="mt-2 text-[13px] text-[#0A0A0B]/70">501c3 status, CTR</p>
-        </div>
-      </div>
-      <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="E-Commerce & Custom Web">
-        <div>
-          <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 03</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
-          <h3 class="satoshi font-bold text-[15px]">E-Commerce & Custom Web</h3>
-          <p class="mt-2 text-[13px] text-[#0A0A0B]/70">Platform, friction points</p>
-        </div>
-      </div>
-      <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Consultancy & Advisory">
-        <div>
-          <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 04</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
-          <h3 class="satoshi font-bold text-[15px]">Consultancy & Advisory</h3>
-          <p class="mt-2 text-[13px] text-[#0A0A0B]/70">Business summary</p>
-        </div>
-      </div>
-    </div>
+    <!-- Step 1 container will be rendered dynamically by renderStep1() -->
+    <div id="step1-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"></div>
 
     <p id="err1" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box">Please select an objective track above to proceed.</p>
 
@@ -180,6 +152,69 @@ function purgeDynamic(container) {
   // clear the content
   container.innerHTML = '';
 }
+
+// Rebuilds the Step 1 cards markup and binds click handlers.
+function renderStep1() {
+  const container = document.getElementById('step1-cards');
+  const dynamic = document.getElementById('dynamic');
+  const nav = document.getElementById('nav');
+  if (!container) return;
+  // Reset container content
+  container.innerHTML = `
+    <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Growth & Performance Marketing">
+      <div>
+        <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 01</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
+        <h3 class="satoshi font-bold text-[15px]">Growth & Performance Marketing</h3>
+        <p class="mt-2 text-[13px] text-[#0A0A0B]/70">Ad spend, CAC/ROAS</p>
+      </div>
+    </div>
+    <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Google Ad Grants">
+      <div>
+        <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 02</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
+        <h3 class="satoshi font-bold text-[15px]">Google Ad Grants</h3>
+        <p class="mt-2 text-[13px] text-[#0A0A0B]/70">501c3 status, CTR</p>
+      </div>
+    </div>
+    <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="E-Commerce & Custom Web">
+      <div>
+        <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 03</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
+        <h3 class="satoshi font-bold text-[15px]">E-Commerce & Custom Web</h3>
+        <p class="mt-2 text-[13px] text-[#0A0A0B]/70">Platform, friction points</p>
+      </div>
+    </div>
+    <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Consultancy & Advisory">
+      <div>
+        <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 04</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
+        <h3 class="satoshi font-bold text-[15px]">Consultancy & Advisory</h3>
+        <p class="mt-2 text-[13px] text-[#0A0A0B]/70">Business summary</p>
+      </div>
+    </div>
+  `;
+
+  // Ensure the container is visible
+  container.classList.remove('hidden');
+  container.style.display = '';
+
+  // (Re)bind click handlers for the newly created cards
+  container.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      const newService = card.dataset.service;
+      if (service !== newService) { clearState(); service = newService; state.service = service; saveState(); }
+      // remove active from any existing cards then set on clicked
+      container.querySelectorAll('.card').forEach(c => c.classList.remove('card-active'));
+      card.classList.add('card-active');
+      const err1 = document.getElementById('err1'); if (err1) err1.classList.add('hidden');
+      if (dynamic) userBubble(`Selected: ${service}`, dynamic);
+      setTimeout(() => {
+        if (dynamic) assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 2 of 4 — Deep Dive</span><br><b class="satoshi text-[15px] text-[#0A0A0B]">Recalibrating questions for ${service}</b>`, dynamic);
+        // hide step1 cards and render step 2
+        container.classList.add('hidden');
+        renderStep2(dynamic, container, document.getElementById('nav'), document.getElementById('prevBtn'), document.getElementById('changeTrackBtn'), document.getElementById('progressBar'), document.getElementById('progressText'));
+      }, 600);
+    });
+  });
+}
+
 function clearState() { 
   state = { branches: {} }; service = ''; current = 1; 
   try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem('discovery_palette_v5'); localStorage.removeItem('discovery_palette_v4'); } catch (e) {}
@@ -187,7 +222,8 @@ function clearState() {
   try {
     const dynamic = document.getElementById('dynamic'); if (dynamic) purgeDynamic(dynamic);
     const nav = document.getElementById('nav'); if (nav) nav.classList.add('hidden');
-    const step1Cards = document.getElementById('step1-cards'); if (step1Cards) step1Cards.classList.remove('hidden');
+    // Re-render Step 1 to guarantee the cards exist and handlers are bound
+    renderStep1();
     // reset progress display
     const progressBar = document.getElementById('progressBar'); const progressText = document.getElementById('progressText'); updateProgress(progressBar, progressText);
   } catch (e) {}
@@ -267,7 +303,7 @@ function renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progress
   if (dynamic) dynamic.classList.remove('hidden');
   let html = '';
   if (service === 'Growth & Performance Marketing') {
-    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Growth economics — paid allocation.</p><div class="space-y-3"><label class="mono text-[12px]">Monthly Ad Spend</label><select id="ad_spend" class="w-full p-3 rounded-xl border"><option value="">Select...</option><option value="<5k"><5k</option><option value=">5k">>5k</option></select></div><div class="space-y-3"><label class="mono text-[12px]">Primary Bottleneck</label><textarea id="breaking_acq" class="w-full p-3 rounded-xl border" rows="3"></textarea></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div>`;
+    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Growth economics — paid allocation.</p><div class="space-y-3"><label class="mono text-[12px]">Monthly Ad Spend</label><select id="ad_spend" class="w-full p-3 rounded-xl border"><option value="">Select...</option><option value="<5k">&lt;5k</option><option value=">5k">&gt;5k</option></select></div><div class="space-y-3"><label class="mono text-[12px]">Primary Bottleneck</label><textarea id="breaking_acq" class="w-full p-3 rounded-xl border" rows="3"></textarea></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div>`;
   } else if (service === 'Google Ad Grants') {
     html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Grants compliance & structure.</p><div class="space-y-3"><label class="mono text-[12px]">501c3 Status</label><select id="nonprofit_status" class="w-full p-3 rounded-xl border"><option value="">Select...</option><option value="yes">Yes</option><option value="no">No</option></select></div><div class="space-y-3"><label class="mono text-[12px]">Current Grants Status</label><select id="grants_status" class="w-full p-3 rounded-xl border"><option value="">Select...</option><option value="applied">Applied</option><option value="approved">Approved</option></select></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div>`;
   } else if (service === 'E-Commerce & Custom Web') {
@@ -332,16 +368,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   updateProgress(progressBar, progressText);
 
-  // card selection
-  document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', () => {
-      const newService = card.dataset.service;
-      if (service !== newService) { clearState(); service = newService; state.service = service; saveState(); }
-      document.querySelectorAll('.card').forEach(c => c.classList.remove('card-active'));
-      card.classList.add('card-active'); if (err1) err1.classList.add('hidden'); if (dynamic) userBubble(`Selected: ${service}`, dynamic);
-      setTimeout(() => { if (dynamic) assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 2 of 4 — Deep Dive</span><br><b class="satoshi text-[15px] text-[#0A0A0B]">Recalibrating questions for ${service}</b>`, dynamic); if (step1Cards) step1Cards.classList.add('hidden'); renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progressBar, progressText); }, 600);
-    });
-  });
+  // Render Step 1 cards (builds DOM and binds handlers)
+  renderStep1();
 
   nextBtn.addEventListener('click', () => {
     if (current === 1) {
@@ -367,14 +395,10 @@ window.addEventListener('DOMContentLoaded', () => {
       if (dynamic) { purgeDynamic(dynamic); dynamic.classList.add('hidden'); }
       // Hide the navigation controls
       if (nav) nav.classList.add('hidden');
-      // Re-query and explicitly show the step1 cards container (in case chat.innerHTML was mutated elsewhere)
-      const cards = document.getElementById('step1-cards');
-      if (cards) {
-        cards.classList.remove('hidden');
-        cards.style.display = '';
-      }
+      // Re-render Step 1 to guarantee the cards exist and handlers are bound
+      renderStep1();
       // Remove any active card styles on the current DOM nodes
-      document.querySelectorAll('.card').forEach(c => c.classList.remove('card-active'));
+      const container = document.getElementById('step1-cards'); if (container) container.querySelectorAll('.card').forEach(c => c.classList.remove('card-active'));
       // Ensure chat wrapper is visible
       if (chat) chat.classList.remove('hidden');
       updateProgress(progressBar, progressText);
@@ -427,13 +451,14 @@ window.addEventListener('DOMContentLoaded', () => {
       const parsed = JSON.parse(raw);
       if (parsed && parsed.service) {
         current = parsed.current || 1; service = parsed.service; state = parsed.state || { branches: {} };
-        if (step1Cards) step1Cards.classList.add('hidden');
+        // if restoring mid-flow, hide step1-cards and render appropriate step
+        const stepContainer = document.getElementById('step1-cards'); if (stepContainer) stepContainer.classList.add('hidden');
         if (current === 2) renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progressBar, progressText);
         else if (current === 3) renderStep3(dynamic, progressBar, progressText, prevBtn, nextBtn);
         else if (current === 4) renderStep4(dynamic, progressBar, progressText, nextBtn, submitBtn);
-      } else { if (step1Cards) step1Cards.classList.remove('hidden'); }
-    } else { if (step1Cards) step1Cards.classList.remove('hidden'); }
-  } catch (e) { clearState(); if (step1Cards) step1Cards.classList.remove('hidden'); }
+      } else { renderStep1(); }
+    } else { renderStep1(); }
+  } catch (e) { clearState(); renderStep1(); }
 });
 </script>
 </body>
