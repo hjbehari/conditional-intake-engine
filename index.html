@@ -263,6 +263,8 @@ function restoreValues(dynamic) {
 
 function renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progressBar, progressText) {
   if (!dynamic) return; current = 2; updateProgress(progressBar, progressText); if (nav) nav.classList.remove('hidden'); if (prevBtn) prevBtn.classList.add('hidden'); if (changeTrackBtn) changeTrackBtn.classList.remove('hidden');
+  // Ensure the dynamic container is visible when rendering a step
+  if (dynamic) dynamic.classList.remove('hidden');
   let html = '';
   if (service === 'Growth & Performance Marketing') {
     html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Growth economics — paid allocation.</p><div class="space-y-3"><label class="mono text-[12px]">Monthly Ad Spend</label><select id="ad_spend" class="w-full p-3 rounded-xl border"><option value="">Select...</option><option value="<5k"><5k</option><option value=">5k">>5k</option></select></div><div class="space-y-3"><label class="mono text-[12px]">Primary Bottleneck</label><textarea id="breaking_acq" class="w-full p-3 rounded-xl border" rows="3"></textarea></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div>`;
@@ -280,6 +282,7 @@ function renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progress
 
 function renderStep3(dynamic, progressBar, progressText, prevBtn, nextBtn) {
   if (!dynamic) return; current = 3; updateProgress(progressBar, progressText); if (prevBtn) prevBtn.classList.remove('hidden');
+  if (dynamic) dynamic.classList.remove('hidden');
   let html = `<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px]">Scoping & Infrastructure Validation.</p><div class="space-y-4"><label class="mono text-[12px]">Website</label><input id="website" class="w-full p-3 rounded-xl border" placeholder="yoursite.org"/></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F8]/70 bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div>`;
   purgeDynamic(dynamic);
   dynamic.innerHTML = html; attachInputListeners(dynamic); restoreValues(dynamic); if (nextBtn) nextBtn.classList.remove('hidden'); saveState();
@@ -287,6 +290,7 @@ function renderStep3(dynamic, progressBar, progressText, prevBtn, nextBtn) {
 
 function renderStep4(dynamic, progressBar, progressText, nextBtn, submitBtn) {
   if (!dynamic) return; current = 4; updateProgress(progressBar, progressText); if (nextBtn) nextBtn.classList.add('hidden'); if (submitBtn) submitBtn.classList.remove('hidden');
+  if (dynamic) dynamic.classList.remove('hidden');
   const html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Routing details.</p><div class="space-y-4"><label class="mono text-[12px]">Name</label><input id="name" class="w-full p-3 rounded-xl border"/><label class="mono text-[12px]">Email</label><input id="email" class="w-full p-3 rounded-xl border"/><label class="mono text-[12px]">Notes</label><textarea id="notes" class="w-full p-3 rounded-xl border" rows="3"></textarea></div><p id="err4" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div>`;
   purgeDynamic(dynamic);
   dynamic.innerHTML = html; attachInputListeners(dynamic); restoreValues(dynamic); saveState();
@@ -359,9 +363,21 @@ window.addEventListener('DOMContentLoaded', () => {
     // Purge any form inputs and handlers before switching tracks
     clearState();
     try {
-      if (chat) chat.innerHTML = `<div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-[#0A0A0B] text-[#F9F8F6] flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1">H</div><div class="space-y-3 max-w-[92%] sm:max-w-[78%]"><div class="bg-white border border-[#D9CFC7] rounded-2xl rounded-tl-sm p-5 shadow-sm"><p class="satoshi font-bold text-[20px] sm:text-[24px] leading-[1.15] text-[#0A0A0B]">Hey — let's see if we're a fit.</p><p class="text-[13px] leading-6 text-[#0A0A0B]/70 mt-3">Pick your track below. You can switch tracks seamlessly at any point; the assistant automatically recalibrates state parameters.</p></div></div></div>`;
-      if (dynamic) purgeDynamic(dynamic);
-      if (nav) nav.classList.add('hidden'); if (step1Cards) step1Cards.classList.remove('hidden'); document.querySelectorAll('.card').forEach(c => c.classList.remove('card-active')); updateProgress(progressBar, progressText);
+      // Ensure dynamic area is cleared and hidden
+      if (dynamic) { purgeDynamic(dynamic); dynamic.classList.add('hidden'); }
+      // Hide the navigation controls
+      if (nav) nav.classList.add('hidden');
+      // Re-query and explicitly show the step1 cards container (in case chat.innerHTML was mutated elsewhere)
+      const cards = document.getElementById('step1-cards');
+      if (cards) {
+        cards.classList.remove('hidden');
+        cards.style.display = '';
+      }
+      // Remove any active card styles on the current DOM nodes
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('card-active'));
+      // Ensure chat wrapper is visible
+      if (chat) chat.classList.remove('hidden');
+      updateProgress(progressBar, progressText);
     } catch (e) {}
   });
 
@@ -380,7 +396,7 @@ window.addEventListener('DOMContentLoaded', () => {
         throw new Error(msg || 'Network response failure');
       }
       // success
-      if (chat) chat.classList.add('hidden'); if (dynamic) dynamic.classList.add('hidden'); if (nav) nav.classList.add('hidden'); if (step1Cards) step1Cards.classList.add('hidden'); if (success) success.classList.remove('hidden');
+      if (chat) chat.classList.add('hidden'); if (dynamic) dynamic.classList.add('hidden'); if (nav) nav.classList.add('hidden'); const stepCards = document.getElementById('step1-cards'); if (stepCards) stepCards.classList.add('hidden'); if (success) success.classList.remove('hidden');
       const summaryText = Object.entries(flatPayload).map(([k, v]) => `${k.toUpperCase()}: ${Array.isArray(v) ? v.join(', ') : v}`).join('\n');
       const summaryBox = document.getElementById('summaryBox'); if (summaryBox) summaryBox.textContent = summaryText;
       const clientEmail = state.branches['step_4']?.email || 'your email'; const clientWebsite = state.branches['step_3']?.website || 'your project';
