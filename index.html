@@ -18,10 +18,7 @@ input,select,textarea{font-size:16px !important}
 .card{transition:all 0.22s ease;background:#FFFFFF;border:1.5px solid #D9CFC7} .card:hover{transform:translateY(-1px);border-color:#C9B59C;box-shadow:0 4px 20px rgba(201,181,156,0.25)}
 .card-active{border-color:#0A0A0B !important;background:#FFFFFF !important;position:relative;box-shadow:0 6px 28px rgba(0,0,0,0.08)}
 .card-active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#FF4D12;border-radius:16px 0 0 16px}
-.card-active .dot{opacity:1 !important}
 select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23C9B59C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.75rem center;background-size:1rem;padding-right:2.5rem}
-.dark-select { background-color: rgba(255,255,255,0.1); color: #F9F8F6; }
-.dark-select option { background-color: #0A0A0B; color: #F9F8F6; }
 input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !important;box-shadow:0 0 0 3px rgba(201,181,156,0.35) !important}
 .error-box{border-left:3px solid #FF4D12 !important}
 .tag{background:#EFE9E3;border:1px solid #D9CFC7;color:#0A0A0B}
@@ -38,7 +35,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
       <div class="ml-auto mono text-[11px] text-[#0A0A0B]/60" id="progressText">Step 1 of 4 • Objective</div>
     </div>
   </div>
-  <div class="w-full h-[1px] bg-[#D9CFC7]"><div id="progressBar" class="h-full bg-[#0A0A0B] transition-all duration-500 relative" style="width:25%"></div></div>
+  <div class="w-full h-[2px] bg-[#D9CFC7]"><div id="progressBar" class="h-full bg-[#0A0A0B] transition-all duration-500 relative" style="width:25%"></div></div>
 </header>
 
 <main class="max-w-3xl mx-auto px-5 sm:px-8 py-6 sm:py-10 w-full flex-grow flex flex-col gap-6">
@@ -54,11 +51,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
       </div>
     </div>
 
-    <!-- Step 1 container will be rendered dynamically by renderStep1() -->
     <div id="step1-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5"></div>
-
     <p id="err1" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box">Please select an objective track above to proceed.</p>
-
     <div id="dynamic" class="flex flex-col gap-5"></div>
   </div>
 
@@ -73,10 +67,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
         <div class="flex items-center justify-between">
           <span class="mono text-[11px] uppercase text-[#0A0A0B]/60">Transmission Summary Payload</span>
           <div>
-            <button id="copyBtn" class="mono text-[11px] px-3 py-1 rounded-xl border">Copy summary</button>
+            <button id="copyBtn" class="mono text-[11px] px-3 py-1 rounded-xl border bg-white hover:bg-gray-50">Copy summary</button>
           </div>
         </div>
-        <pre id="summaryBox" class="bg-white border border-[#D9CFC7] rounded-xl p-3 text-[12px] mono overflow-auto max-h-40"></pre>
+        <pre id="summaryBox" class="bg-white border border-[#D9CFC7] rounded-xl p-3 text-[12px] mono overflow-auto max-h-40 whitespace-pre-wrap"></pre>
         <button id="newBtn" class="w-full py-4 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] satoshi font-bold text-[14px] hover:bg-black/90 transition-colors">Start New Assessment</button>
       </div>
     </div>
@@ -96,19 +90,18 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
       <button id="changeTrackBtn" class="px-4 py-2.5 rounded-xl border border-[#D9CFC7] bg-white text-[13px] satoshi font-bold text-[#0A0A0B] hover:bg-[#F9F8F6]">Change Track</button>
     </div>
     <div class="flex items-center gap-3">
-      <button id="nextBtn" class="px-6 py-2.5 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] text-[13px] satoshi font-bold hover:bg-black/90">Continue</button>
-      <button id="submitBtn" class="hidden px-6 py-2.5 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] text-[13px] satoshi font-bold hover:bg-black/90">Submit</button>
+      <button id="nextBtn" class="px-6 py-2.5 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] text-[13px] satoshi font-bold hover:bg-black/90 disabled:opacity-50">Continue</button>
+      <button id="submitBtn" class="hidden px-6 py-2.5 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] text-[13px] satoshi font-bold hover:bg-black/90 disabled:opacity-50">Submit</button>
     </div>
   </div>
 </div>
 
 <script>
-// --- ENTERPRISE STATE MACHINE ---
 let current = 1, service = '', state = { branches: {} };
+let isTransitioning = false;
 const STORAGE_KEY = 'discovery_palette_v6';
 const BLOCKLIST = ['idk', 'n/a', 'na', 'none', 'null', 'test', 'asdf', 'qwerty', 'blah', '...'];
 
-// Map to track input handlers so we can remove them cleanly
 const inputHandlerMap = new WeakMap();
 
 function isVague(val) {
@@ -124,36 +117,46 @@ function isValidUrl(val) {
   if (!val) return false;
   try {
     const raw = val.trim();
-    const u = raw.startsWith('http://') || raw.startsWith('https://') ? raw : 'https://' + raw;
+    const u = /^https?:\/\//i.test(raw) ? raw : 'https://' + raw;
     const parsed = new URL(u);
-    return parsed.protocol === 'https:' && parsed.hostname.includes('.') && parsed.hostname.length > 3;
+    return (parsed.protocol === 'http:' || parsed.protocol === 'https:') && 
+           parsed.hostname.includes('.') && 
+           parsed.hostname.split('.').every(part => part.length > 0);
   } catch (e) {
     return false;
   }
 }
 
 function isValidEmail(val) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  if (!val) return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val.trim());
+}
+
+function escapeHTML(str) {
+  if (!str) return '';
+  return str.replace(/[&<>'"]/g, tag => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+  }[tag] || tag));
 }
 
 function saveState() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ current, service, state })); } catch (e) {}
 }
+
 function purgeDynamic(container) {
   if (!container) return;
-  // Remove attached handlers for inputs inside this container
   const els = container.querySelectorAll('input, select, textarea');
   els.forEach(el => {
     const handlers = inputHandlerMap.get(el);
-    if (handlers && handlers.input) el.removeEventListener('input', handlers.input);
-    if (handlers && handlers.change) el.removeEventListener('change', handlers.change);
-    inputHandlerMap.delete(el);
+    if (handlers) {
+      el.removeEventListener('input', handlers.input);
+      el.removeEventListener('change', handlers.change);
+      inputHandlerMap.delete(el);
+    }
   });
-  // clear the content
   container.innerHTML = '';
 }
 
-// Data-driven track configuration
 const TRACKS = [
   { id: 'growth', title: 'Growth & Performance Marketing', desc: 'Ad spend, CAC/ROAS', badge: 'Track 01' },
   { id: 'grants', title: 'Google Ad Grants', desc: '501c3 status, CTR', badge: 'Track 02' },
@@ -161,18 +164,16 @@ const TRACKS = [
   { id: 'consult', title: 'Consultancy & Advisory', desc: 'Business summary', badge: 'Track 04' }
 ];
 
-// Rebuilds the Step 1 cards markup and binds click handlers using TRACKS config.
 function renderStep1() {
   const container = document.getElementById('step1-cards');
   const dynamic = document.getElementById('dynamic');
   if (!container) return;
 
-  // Clear existing
   container.innerHTML = '';
 
   TRACKS.forEach(track => {
     const card = document.createElement('div');
-    card.className = 'card p-5 rounded-2xl cursor-pointer flex flex-col justify-between';
+    card.className = `card p-5 rounded-2xl cursor-pointer flex flex-col justify-between ${service === track.title ? 'card-active' : ''}`;
     card.setAttribute('data-service', track.title);
     card.setAttribute('data-track-id', track.id);
 
@@ -187,57 +188,53 @@ function renderStep1() {
       </div>
     `;
 
-    container.appendChild(card);
-  });
+    card.addEventListener('click', () => {
+      if (isTransitioning) return;
+      isTransitioning = true;
 
-  // Ensure the container is visible
-  container.classList.remove('hidden');
-  container.style.display = '';
-
-  // (Re)bind click handlers for the newly created cards
-  container.querySelectorAll('.card').forEach(card => {
-    // Remove any previous listeners (defensive)
-    const cloned = card.cloneNode(true);
-    card.parentNode.replaceChild(cloned, card);
-    cloned.addEventListener('click', () => {
-      const newService = cloned.dataset.service;
-      // Reset branch data but do not re-render step1 (we're already in click flow)
       state.branches = {};
-      service = newService;
+      service = track.title;
       state.service = service;
       current = 1;
       saveState();
 
-      // remove active from any existing cards then set on clicked
-      const cont = document.getElementById('step1-cards'); if (cont) cont.querySelectorAll('.card').forEach(c => c.classList.remove('card-active'));
-      cloned.classList.add('card-active');
-      const err1 = document.getElementById('err1'); if (err1) err1.classList.add('hidden');
+      container.querySelectorAll('.card').forEach(c => c.classList.remove('card-active'));
+      card.classList.add('card-active');
+      
+      const err1 = document.getElementById('err1'); 
+      if (err1) err1.classList.add('hidden');
+      
       if (dynamic) userBubble(`Selected: ${service}`, dynamic);
+      
       setTimeout(() => {
         if (dynamic) assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 2 of 4 — Deep Dive</span><br><b class="satoshi text-[15px] text-[#0A0A0B]">Recalibrating parameters.</b>`, dynamic);
-        // hide step1 cards and render step 2
-        const cont2 = document.getElementById('step1-cards'); if (cont2) cont2.classList.add('hidden');
-        renderStep2(dynamic, document.getElementById('step1-cards'), document.getElementById('nav'), document.getElementById('prevBtn'), document.getElementById('changeTrackBtn'), document.getElementById('progressBar'), document.getElementById('progressText'));
-      }, 600);
+        container.classList.add('hidden');
+        renderStep2();
+        isTransitioning = false;
+      }, 500);
     });
+
+    container.appendChild(card);
   });
+
+  container.classList.remove('hidden');
 }
 
 function clearState() { 
-  state = { branches: {} }; service = ''; current = 1; 
-  try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem('discovery_palette_v5'); localStorage.removeItem('discovery_palette_v4'); } catch (e) {}
-  // Try to clear any DOM fragments if present (defensive)
-  try {
-    const dynamic = document.getElementById('dynamic'); if (dynamic) purgeDynamic(dynamic);
-    const nav = document.getElementById('nav'); if (nav) nav.classList.add('hidden');
-    // Re-render Step 1 to guarantee the cards exist and handlers are bound
-    renderStep1();
-    // reset progress display
-    const progressBar = document.getElementById('progressBar'); const progressText = document.getElementById('progressText'); updateProgress(progressBar, progressText);
+  state = { branches: {} }; 
+  service = ''; 
+  current = 1; 
+  isTransitioning = false;
+  try { 
+    localStorage.removeItem(STORAGE_KEY); 
+    localStorage.removeItem('discovery_palette_v5'); 
+    localStorage.removeItem('discovery_palette_v4'); 
   } catch (e) {}
 }
 
-function updateProgress(progressBar, progressText) {
+function updateProgress() {
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progressText');
   if (progressBar) progressBar.style.width = (current / 4 * 100) + '%';
   const labels = { 1: 'Objective', 2: 'Deep Dive', 3: 'Scoping', 4: 'Validation' };
   if (progressText) progressText.textContent = `Step ${current} of 4 • ${labels[current]}`;
@@ -246,10 +243,11 @@ function updateProgress(progressBar, progressText) {
 function assistantBubble(htmlContent, dynamic) {
   if (!dynamic) return;
   const wrap = document.createElement('div'); wrap.className = 'flex gap-3';
-  const avatar = document.createElement('div'); avatar.className = 'w-8 h-8 rounded-full bg-[#0A0A0B] text-[#F9F8F6] flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1'; avatar.textContent = 'A';
+  const avatar = document.createElement('div'); avatar.className = 'w-8 h-8 rounded-full bg-[#0A0A0B] text-[#F9F8F6] flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1'; avatar.textContent = 'H';
   const box = document.createElement('div'); box.className = 'bg-white border border-[#D9CFC7] rounded-2xl rounded-tl-sm p-4 sm:p-5 text-[13px] leading-6 max-w-[92%] sm:max-w-[78%] text-[#0A0A0B]';
   box.innerHTML = htmlContent; wrap.appendChild(avatar); wrap.appendChild(box); dynamic.appendChild(wrap);
 }
+
 function userBubble(textString, dynamic) {
   if (!dynamic) return;
   const wrap = document.createElement('div'); wrap.className = 'flex gap-3 ml-auto flex-row-reverse';
@@ -258,114 +256,209 @@ function userBubble(textString, dynamic) {
   wrap.appendChild(avatar); wrap.appendChild(box); dynamic.appendChild(wrap);
 }
 
-function getActiveBranchKey() { return `step_${current}`; }
-
 function attachInputListeners(dynamic) {
   if (!dynamic) return;
   dynamic.querySelectorAll('input, select, textarea').forEach(el => {
-    const key = el.id || el.name; if (!key) return;
+    const key = el.id || el.name; 
+    if (!key) return;
 
-    // If a handler already exists for this element, remove it to avoid duplicates
-    const existing = inputHandlerMap.get(el);
-    if (existing && existing.input) el.removeEventListener('input', existing.input);
-    if (existing && existing.change) el.removeEventListener('change', existing.change);
-
-    const inputHandler = () => {
+    const handler = () => {
       try {
-        if (!state.branches[getActiveBranchKey()]) state.branches[getActiveBranchKey()] = {};
+        const branchKey = `step_${current}`;
+        if (!state.branches[branchKey]) state.branches[branchKey] = {};
         if (el.type === 'checkbox') {
           const groupName = el.name;
           const checkedValues = [...dynamic.querySelectorAll(`input[name="${groupName}"]:checked`)].map(i => i.value);
-          state.branches[getActiveBranchKey()][groupName] = checkedValues;
+          state.branches[branchKey][groupName] = checkedValues;
         } else {
-          state.branches[getActiveBranchKey()][key] = el.value;
+          state.branches[branchKey][key] = el.value;
         }
         saveState();
       } catch (e) {}
     };
-    const changeHandler = inputHandler;
 
-    el.addEventListener('input', inputHandler);
-    el.addEventListener('change', changeHandler);
-
-    inputHandlerMap.set(el, { input: inputHandler, change: changeHandler });
+    el.addEventListener('input', handler);
+    el.addEventListener('change', handler);
+    inputHandlerMap.set(el, { input: handler, change: handler });
   });
 }
 
 function restoreValues(dynamic) {
   if (!dynamic) return;
   try {
-    const branchData = state.branches[getActiveBranchKey()] || {};
+    const branchData = state.branches[`step_${current}`] || {};
     dynamic.querySelectorAll('input, select, textarea').forEach(el => {
-      const key = el.id || el.name; if (!key) return;
+      const key = el.id || el.name; 
+      if (!key) return;
       if (el.type === 'checkbox') {
-        const vals = branchData[el.name] || []; el.checked = vals.includes(el.value);
-      } else { if (branchData[key] !== undefined) el.value = branchData[key]; }
+        const vals = branchData[el.name] || []; 
+        el.checked = vals.includes(el.value);
+      } else { 
+        if (branchData[key] !== undefined) el.value = branchData[key]; 
+      }
     });
   } catch (e) {}
 }
 
-function renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progressBar, progressText) {
-  if (!dynamic) return; current = 2; updateProgress(progressBar, progressText); if (nav) nav.classList.remove('hidden'); if (prevBtn) prevBtn.classList.add('hidden'); if (changeTrackBtn) changeTrackBtn.classList.remove('hidden');
-  // Ensure the dynamic container is visible when rendering a step
-  if (dynamic) dynamic.classList.remove('hidden');
+function syncNavButtons() {
+  const nav = document.getElementById('nav');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  const changeTrackBtn = document.getElementById('changeTrackBtn');
+
+  if (current === 1) {
+    if (nav) nav.classList.add('hidden');
+  } else {
+    if (nav) nav.classList.remove('hidden');
+    if (changeTrackBtn) changeTrackBtn.classList.remove('hidden');
+
+    if (current === 2) {
+      if (prevBtn) prevBtn.classList.add('hidden');
+      if (nextBtn) nextBtn.classList.remove('hidden');
+      if (submitBtn) submitBtn.classList.add('hidden');
+    } else if (current === 3) {
+      if (prevBtn) prevBtn.classList.remove('hidden');
+      if (nextBtn) nextBtn.classList.remove('hidden');
+      if (submitBtn) submitBtn.classList.add('hidden');
+    } else if (current === 4) {
+      if (prevBtn) prevBtn.classList.remove('hidden');
+      if (nextBtn) nextBtn.classList.add('hidden');
+      if (submitBtn) submitBtn.classList.remove('hidden');
+    }
+  }
+}
+
+function renderStep2() {
+  current = 2; 
+  updateProgress(); 
+  syncNavButtons();
+
+  const dynamic = document.getElementById('dynamic');
+  if (!dynamic) return;
+  dynamic.classList.remove('hidden');
+
   let html = '';
   if (service === 'Growth & Performance Marketing') {
-    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Growth economics — paid allocation.</p><div class="space-y-4"><label class="block"><span class="satoshi font-600 text-[14px]">Monthly ad spend</span><select id="ad_spend" class="mt-2 w-full px-3 py-2.5 border border-[#D9CFC7] rounded-lg"><option value="">Select range</option><option value="0-5k">\$0 - \$5k</option><option value="5k-15k">\$5k - \$15k</option><option value="15k-50k">\$15k - \$50k</option><option value="50k+">\$50k+</option></select></label><label class="block"><span class="satoshi font-600 text-[14px]">What's the biggest bottleneck?</span><textarea id="breaking_acq" class="mt-2 w-full px-3 py-2.5 border border-[#D9CFC7] rounded-lg" rows="3" placeholder="E.g., LTV plateauing, CAC rising, attribution gaps..."></textarea></label></div></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p>`;
+    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Growth economics — paid allocation.</p><div class="space-y-4"><label class="block"><span class="satoshi font-600 text-[14px]">Monthly ad spend</span><select id="ad_spend" class="mt-2 w-full px-3 py-2.5 border border-[#D9CFC7] rounded-lg bg-white"><option value="">Select range</option><option value="0-5k">$0 - $5k</option><option value="5k-15k">$5k - $15k</option><option value="15k-50k">$15k - $50k</option><option value="50k+">$50k+</option></select></label><label class="block"><span class="satoshi font-600 text-[14px]">What's the biggest bottleneck?</span><textarea id="breaking_acq" class="mt-2 w-full px-3 py-2.5 border border-[#D9CFC7] rounded-lg" rows="3" placeholder="E.g., LTV plateauing, CAC rising, attribution gaps..."></textarea></label></div></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p>`;
   } else if (service === 'Google Ad Grants') {
-    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Grants compliance & structure.</p><div class="space-y-4"><label class="block"><span class="satoshi font-600 text-[14px]">Nonprofit status</span><select id="nonprofit_status" class="mt-2 w-full px-3 py-2.5 border border-[#D9CFC7] rounded-lg"><option value="">Select status</option><option value="501c3">501c3 approved</option><option value="applied">Applied, pending</option><option value="other">Other nonprofit</option></select></label><label class="block"><span class="satoshi font-600 text-[14px]">Google Ad Grants status</span><select id="grants_status" class="mt-2 w-full px-3 py-2.5 border border-[#D9CFC7] rounded-lg"><option value="">Select status</option><option value="approved">Approved</option><option value="denied">Denied</option><option value="not_applied">Not applied</option></select></label></div></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p>`;
+    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Grants compliance & structure.</p><div class="space-y-4"><label class="block"><span class="satoshi font-600 text-[14px]">Nonprofit status</span><select id="nonprofit_status" class="mt-2 w-full px-3 py-2.5 border border-[#D9CFC7] rounded-lg bg-white"><option value="">Select status</option><option value="501c3">501c3 approved</option><option value="applied">Applied, pending</option><option value="other">Other nonprofit</option></select></label><label class="block"><span class="satoshi font-600 text-[14px]">Google Ad Grants status</span><select id="grants_status" class="mt-2 w-full px-3 py-2.5 border border-[#D9CFC7] rounded-lg bg-white"><option value="">Select status</option><option value="approved">Approved</option><option value="denied">Denied</option><option value="not_applied">Not applied</option></select></label></div></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p>`;
   } else if (service === 'E-Commerce & Custom Web') {
-    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Storefront conversion architecture.</p><div class="space-y-4"><label class="block"><span class="satoshi font-600 text-[14px]">Platform</span><select id="platform" class="mt-2 w-full px-3 py-2.5 border border-[#D9CFC7] rounded-lg"><option value="">Select platform</option><option value="shopify">Shopify</option><option value="shopify-plus">Shopify Plus</option><option value="woocommerce">WooCommerce</option><option value="bigcommerce">BigCommerce</option><option value="magento">Magento/Adobe</option><option value="custom">Custom</option><option value="headless">Headless</option></select></label></div></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p>`;
+    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Storefront conversion architecture.</p><div class="space-y-4"><label class="block"><span class="satoshi font-600 text-[14px]">Platform</span><select id="platform" class="mt-2 w-full px-3 py-2.5 border border-[#D9CFC7] rounded-lg bg-white"><option value="">Select platform</option><option value="shopify">Shopify</option><option value="shopify-plus">Shopify Plus</option><option value="woocommerce">WooCommerce</option><option value="bigcommerce">BigCommerce</option><option value="magento">Magento/Adobe</option><option value="custom">Custom</option><option value="headless">Headless</option></select></label></div></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p>`;
   } else {
     html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Consultancy & Advisory.</p><div class="space-y-4"><label class="block"><span class="satoshi font-600 text-[14px]">Business summary</span><textarea id="biz_sentence" class="mt-2 w-full px-3 py-2.5 border border-[#D9CFC7] rounded-lg" rows="3" placeholder="Describe your business and key challenges..."></textarea></label></div></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p>`;
   }
-  // Purge any lingering listeners for safety before injecting
+  
   purgeDynamic(dynamic);
-  dynamic.innerHTML = html; attachInputListeners(dynamic); restoreValues(dynamic); saveState();
+  dynamic.innerHTML = html; 
+  attachInputListeners(dynamic); 
+  restoreValues(dynamic); 
+  saveState();
 }
 
-function renderStep3(dynamic, progressBar, progressText, prevBtn, nextBtn) {
-  if (!dynamic) return; current = 3; updateProgress(progressBar, progressText); if (prevBtn) prevBtn.classList.remove('hidden');
-  if (dynamic) dynamic.classList.remove('hidden');
-  let html = `<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px]">Scoping & Infrastructure Validation.</p><div class="space-y-4"><label class="block"><span class="satoshi font-600 text-[14px]">What's your primary domain or website URL?</span><input type="text" id="website" class="mt-2 w-full px-3 py-2.5 bg-white/10 border border-white/20 text-[#F9F8F6] rounded-lg placeholder-white/40" placeholder="e.g., acme.com"></label><label class="block"><span class="satoshi font-600 text-[14px]">Annual revenue (optional)</span><input type="text" id="revenue" class="mt-2 w-full px-3 py-2.5 bg-white/10 border border-white/20 text-[#F9F8F6] rounded-lg placeholder-white/40" placeholder="e.g., \$500k or 1.2M"></label></div></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box"></p>`;
+function renderStep3() {
+  current = 3; 
+  updateProgress(); 
+  syncNavButtons();
+
+  const dynamic = document.getElementById('dynamic');
+  if (!dynamic) return;
+  dynamic.classList.remove('hidden');
+
+  let html = `<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px]">Scoping & Infrastructure Validation.</p><div class="space-y-4"><label class="block"><span class="satoshi font-600 text-[14px]">What's your primary domain or website URL?</span><input type="text" id="website" class="mt-2 w-full px-3 py-2.5 bg-white/10 border border-white/20 text-[#F9F8F6] rounded-lg placeholder-white/40" placeholder="e.g., acme.com"></label><label class="block"><span class="satoshi font-600 text-[14px]">Annual revenue (optional)</span><input type="text" id="revenue" class="mt-2 w-full px-3 py-2.5 bg-white/10 border border-white/20 text-[#F9F8F6] rounded-lg placeholder-white/40" placeholder="e.g., $500k or 1.2M"></label></div></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box"></p>`;
+  
   purgeDynamic(dynamic);
-  dynamic.innerHTML = html; attachInputListeners(dynamic); restoreValues(dynamic); if (nextBtn) nextBtn.classList.remove('hidden'); saveState();
+  dynamic.innerHTML = html; 
+  attachInputListeners(dynamic); 
+  restoreValues(dynamic); 
+  saveState();
 }
 
-function renderStep4(dynamic, progressBar, progressText, nextBtn, submitBtn) {
-  if (!dynamic) return; current = 4; updateProgress(progressBar, progressText); if (nextBtn) nextBtn.classList.add('hidden'); if (submitBtn) submitBtn.classList.remove('hidden');
-  if (dynamic) dynamic.classList.remove('hidden');
+function renderStep4() {
+  current = 4; 
+  updateProgress(); 
+  syncNavButtons();
+
+  const dynamic = document.getElementById('dynamic');
+  if (!dynamic) return;
+  dynamic.classList.remove('hidden');
+
   const html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Routing details.</p><div class="space-y-4"><label class="block"><span class="satoshi font-600 text-[14px]">Full name</span><input type="text" id="name" class="mt-2 w-full px-3 py-2.5 border border-[#D9CFC7] rounded-lg" placeholder="Your full name"></label><label class="block"><span class="satoshi font-600 text-[14px]">Email</span><input type="email" id="email" class="mt-2 w-full px-3 py-2.5 border border-[#D9CFC7] rounded-lg" placeholder="you@company.com"></label></div></div><p id="err4" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p>`;
+  
   purgeDynamic(dynamic);
-  dynamic.innerHTML = html; attachInputListeners(dynamic); restoreValues(dynamic); saveState();
+  dynamic.innerHTML = html; 
+  attachInputListeners(dynamic); 
+  restoreValues(dynamic); 
+  saveState();
 }
 
 function validateStep2() {
-  const err = document.getElementById('err2'); const branchData = state.branches['step_2'] || {};
+  const err = document.getElementById('err2'); 
+  const branchData = state.branches['step_2'] || {};
   if (service === 'Growth & Performance Marketing') {
-    if (!branchData.ad_spend) { if (err) { err.textContent = 'Please select your monthly ad spend.'; err.classList.remove('hidden'); } return false; }
-    if (isVague(branchData.breaking_acq)) { if (err) { err.textContent = 'Please provide at least 5 meaningful characters for your bottleneck.'; err.classList.remove('hidden'); } return false; }
+    if (!branchData.ad_spend) { 
+      if (err) { err.textContent = 'Please select your monthly ad spend.'; err.classList.remove('hidden'); } 
+      return false; 
+    }
+    if (isVague(branchData.breaking_acq)) { 
+      if (err) { err.textContent = 'Please provide at least 5 meaningful characters for your bottleneck.'; err.classList.remove('hidden'); } 
+      return false; 
+    }
   } else if (service === 'Google Ad Grants') {
-    if (!branchData.nonprofit_status || !branchData.grants_status) { if (err) { err.textContent = 'Please complete all required status options.'; err.classList.remove('hidden'); } return false; }
+    if (!branchData.nonprofit_status || !branchData.grants_status) { 
+      if (err) { err.textContent = 'Please complete all required status options.'; err.classList.remove('hidden'); } 
+      return false; 
+    }
   } else if (service === 'E-Commerce & Custom Web') {
-    if (!branchData.platform) { if (err) { err.textContent = 'Please select your e-commerce platform.'; err.classList.remove('hidden'); } return false; }
+    if (!branchData.platform) { 
+      if (err) { err.textContent = 'Please select your e-commerce platform.'; err.classList.remove('hidden'); } 
+      return false; 
+    }
   } else {
-    if (isVague(branchData.biz_sentence)) { if (err) { err.textContent = 'Please summarize your business properly.'; err.classList.remove('hidden'); } return false; }
+    if (isVague(branchData.biz_sentence)) { 
+      if (err) { err.textContent = 'Please summarize your business properly.'; err.classList.remove('hidden'); } 
+      return false; 
+    }
   }
-  if (err) err.classList.add('hidden'); return true;
+  if (err) err.classList.add('hidden'); 
+  return true;
 }
-function validateStep3() { const err = document.getElementById('err3'); const branchData = state.branches['step_3'] || {}; if (!isValidUrl(branchData.website)) { if (err) { err.textContent = 'Please enter a valid website URL (e.g., acme.com or https://acme.com).'; err.classList.remove('hidden'); } return false; } if (err) err.classList.add('hidden'); return true; }
-function validateStep4() { const err = document.getElementById('err4'); const branchData = state.branches['step_4'] || {}; const name = (branchData.name || '').trim(); const email = (branchData.email || '').trim(); if (!name || name.length < 2) { if (err) { err.textContent = 'Please enter your full name.'; err.classList.remove('hidden'); } return false; } if (!isValidEmail(email)) { if (err) { err.textContent = 'Please enter a valid email address.'; err.classList.remove('hidden'); } return false; } if (err) err.classList.add('hidden'); return true; }
 
-// Event wiring and initial DOM-dependent setup
+function validateStep3() { 
+  const err = document.getElementById('err3'); 
+  const branchData = state.branches['step_3'] || {}; 
+  if (!isValidUrl(branchData.website)) { 
+    if (err) { 
+      err.textContent = 'Please enter a valid website domain or URL (e.g., acme.com or https://acme.com).'; 
+      err.classList.remove('hidden'); 
+    } 
+    return false; 
+  } 
+  if (err) err.classList.add('hidden'); 
+  return true; 
+}
+
+function validateStep4() { 
+  const err = document.getElementById('err4'); 
+  const branchData = state.branches['step_4'] || {}; 
+  const name = (branchData.name || '').trim(); 
+  const email = (branchData.email || '').trim(); 
+  if (!name || name.length < 2) { 
+    if (err) { err.textContent = 'Please enter your full name.'; err.classList.remove('hidden'); } 
+    return false; 
+  } 
+  if (!isValidEmail(email)) { 
+    if (err) { err.textContent = 'Please enter a valid email address.'; err.classList.remove('hidden'); } 
+    return false; 
+  } 
+  if (err) err.classList.add('hidden'); 
+  return true; 
+}
+
 window.addEventListener('DOMContentLoaded', () => {
-  const progressBar = document.getElementById('progressBar');
-  const progressText = document.getElementById('progressText');
-  const chat = document.getElementById('chat');
   const dynamic = document.getElementById('dynamic');
   const step1Cards = document.getElementById('step1-cards');
   const err1 = document.getElementById('err1');
-  const nav = document.getElementById('nav');
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
   const submitBtn = document.getElementById('submitBtn');
@@ -374,100 +467,173 @@ window.addEventListener('DOMContentLoaded', () => {
   const copyBtn = document.getElementById('copyBtn');
   const newBtn = document.getElementById('newBtn');
 
-  updateProgress(progressBar, progressText);
-
-  // Render Step 1 cards (builds DOM and binds handlers)
   renderStep1();
+  updateProgress();
+  syncNavButtons();
 
   nextBtn.addEventListener('click', () => {
+    if (isTransitioning) return;
+
     if (current === 1) {
-      if (!service) { if (err1) err1.classList.remove('hidden'); return; }
-      renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progressBar, progressText);
+      if (!service) { 
+        if (err1) err1.classList.remove('hidden'); 
+        return; 
+      }
+      step1Cards.classList.add('hidden');
+      renderStep2();
     } else if (current === 2) {
-      if (!validateStep2()) return; if (dynamic) userBubble('Completed Step 2 analysis.', dynamic); setTimeout(() => { if (dynamic) assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 3 of 4 — Scoping</span><br><b class="satoshi text-[15px] text-[#0A0A0B]">Validating infrastructure.</b>`, dynamic); renderStep3(dynamic, progressBar, progressText, prevBtn, nextBtn); }, 600);
+      if (!validateStep2()) return;
+      isTransitioning = true;
+      if (dynamic) userBubble('Completed Step 2 analysis.', dynamic);
+      setTimeout(() => {
+        if (dynamic) assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 3 of 4 — Scoping</span><br><b class="satoshi text-[15px] text-[#0A0A0B]">Validating infrastructure.</b>`, dynamic);
+        renderStep3();
+        isTransitioning = false;
+      }, 400);
     } else if (current === 3) {
-      if (!validateStep3()) return; if (dynamic) userBubble('Completed Step 3 scoping.', dynamic); setTimeout(() => { if (dynamic) assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 4 of 4 — Validation</span><br><b class="satoshi text-[15px] text-[#0A0A0B]">Ready to transmit.</b>`, dynamic); renderStep4(dynamic, progressBar, progressText, nextBtn, submitBtn); }, 600);
+      if (!validateStep3()) return;
+      isTransitioning = true;
+      if (dynamic) userBubble('Completed Step 3 scoping.', dynamic);
+      setTimeout(() => {
+        if (dynamic) assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 4 of 4 — Validation</span><br><b class="satoshi text-[15px] text-[#0A0A0B]">Ready to transmit.</b>`, dynamic);
+        renderStep4();
+        isTransitioning = false;
+      }, 400);
     }
   });
 
   prevBtn.addEventListener('click', () => {
-    if (current === 3) { renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progressBar, progressText); if (prevBtn) prevBtn.classList.add('hidden'); }
-    else if (current === 4) { renderStep3(dynamic, progressBar, progressText, prevBtn, nextBtn); }
-  });
-
-  if (changeTrackBtn) changeTrackBtn.addEventListener('click', () => {
-    // Purge any form inputs and handlers before switching tracks
-    clearState();
-    try {
-      // Ensure dynamic area is cleared and hidden
-      if (dynamic) { purgeDynamic(dynamic); dynamic.classList.add('hidden'); }
-      // Hide the navigation controls
-      if (nav) nav.classList.add('hidden');
-      // Re-render Step 1 to guarantee the cards exist and handlers are bound
-      renderStep1();
-      // Remove any active card styles on the current DOM nodes
-      const container = document.getElementById('step1-cards'); if (container) container.querySelectorAll('.card').forEach(c => c.classList.remove('card-active'));
-      // Ensure chat wrapper is visible
-      if (chat) chat.classList.remove('hidden');
-      updateProgress(progressBar, progressText);
-    } catch (e) {}
-  });
-
-  if (submitBtn) submitBtn.addEventListener('click', async () => {
-    if (!validateStep4()) return; if (dynamic) userBubble('Submitting assessment package.', dynamic);
-    submitBtn.disabled = true; const originalText = submitBtn.textContent; submitBtn.textContent = 'Transmitting data...';
-    const flatPayload = { service, _subject: `Intake Submission: ${service}` };
-    Object.values(state.branches).forEach(branchObj => Object.assign(flatPayload, branchObj));
-    // Use Google Apps Script Web App endpoint (text/plain to avoid preflight for JSON)
-    const endpoint = 'https://script.google.com/macros/s/AKfycbz5XRKfxRe750m9SjPCvQtd62wuL_XX3PHJbQHFh3cgPYTMSMMREDyXmU9gWCB3mFk/exec';
-    try {
-      const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(flatPayload) });
-      if (!response.ok) {
-        let msg = 'Network response failure';
-        try { msg = await response.text(); } catch (e) {}
-        throw new Error(msg || 'Network response failure');
-      }
-      // success
-      if (chat) chat.classList.add('hidden'); if (dynamic) dynamic.classList.add('hidden'); if (nav) nav.classList.add('hidden'); const stepCards = document.getElementById('step1-cards'); if (stepCards) stepCards.classList.add('hidden');
-      const success = document.getElementById('success'); if (success) success.classList.remove('hidden');
-      const summaryText = Object.entries(flatPayload).map(([k, v]) => `${k.toUpperCase()}: ${Array.isArray(v) ? v.join(', ') : v}`).join('\n');
-      const summaryBox = document.getElementById('summaryBox'); if (summaryBox) summaryBox.textContent = summaryText;
-      const clientEmail = state.branches['step_4']?.email || 'your email'; const clientWebsite = state.branches['step_3']?.website || 'your project';
-      const personalizedNext = document.getElementById('personalizedNext'); if (personalizedNext) {
-        personalizedNext.innerHTML = '';
-        const h3 = document.createElement('h3'); h3.className = 'satoshi font-bold text-[16px] text-[#0A0A0B]'; h3.textContent = `Next steps for ${service}:`;
-        const p = document.createElement('p'); p.className = 'text-[13px] text-[#0A0A0B]/70 leading-6'; p.innerHTML = `Audit complete for <b>${clientWebsite}</b>. Teardown report routing to <b>${clientEmail}</b> within 24hrs.`;
-        personalizedNext.appendChild(h3); personalizedNext.appendChild(p);
-      }
-      clearState();
-    } catch (err) {
-      // rollback submit button and show user-facing error
-      submitBtn.disabled = false; submitBtn.textContent = 'Retry Submission';
-      const err4 = document.getElementById('err4'); if (err4) { err4.textContent = 'Transmission failed due to network or server issues. Please check your connection and try again.'; err4.classList.remove('hidden'); }
-      console.error('Submission error:', err);
-      // ensure state saved so user doesn't lose filled data
-      saveState();
+    if (isTransitioning) return;
+    if (current === 3) { 
+      renderStep2();
+    } else if (current === 4) { 
+      renderStep3(); 
     }
   });
 
-  if (copyBtn) copyBtn.addEventListener('click', () => { const sb = document.getElementById('summaryBox'); if (!sb) return; navigator.clipboard.writeText(sb.textContent).then(() => { copyBtn.textContent = '✓ Copied'; setTimeout(() => { copyBtn.textContent = 'Copy summary'; }, 2000); }).catch(() => { copyBtn.textContent = 'Copy failed'; }); });
-  if (newBtn) newBtn.addEventListener('click', () => { clearState(); location.reload(); });
+  if (changeTrackBtn) {
+    changeTrackBtn.addEventListener('click', () => {
+      clearState();
+      const chat = document.getElementById('chat');
+      if (dynamic) { purgeDynamic(dynamic); dynamic.classList.add('hidden'); }
+      if (chat) chat.classList.remove('hidden');
+      renderStep1();
+      updateProgress();
+      syncNavButtons();
+    });
+  }
 
-  // restore state if present
+  if (submitBtn) {
+    submitBtn.addEventListener('click', async () => {
+      if (!validateStep4()) return;
+      
+      submitBtn.disabled = true;
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Transmitting data...';
+
+      const flatPayload = { service, _subject: `Intake Submission: ${service}` };
+      Object.values(state.branches).forEach(branchObj => Object.assign(flatPayload, branchObj));
+
+      const endpoint = 'https://script.google.com/macros/s/AKfycbz5XRKfxRe750m9SjPCvQtd62wuL_XX3PHJbQHFh3cgPYTMSMMREDyXmU9gWCB3mFk/exec';
+      
+      try {
+        await fetch(endpoint, {
+          method: 'POST',
+          mode: 'no-cors', // standard workaround for Google Apps Script Web Apps
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(flatPayload)
+        });
+
+        const chat = document.getElementById('chat');
+        const nav = document.getElementById('nav');
+        if (chat) chat.classList.add('hidden');
+        if (nav) nav.classList.add('hidden');
+        if (success) success.classList.remove('hidden');
+
+        const summaryText = Object.entries(flatPayload)
+          .map(([k, v]) => `${k.toUpperCase()}: ${Array.isArray(v) ? v.join(', ') : v}`)
+          .join('\n');
+        
+        const summaryBox = document.getElementById('summaryBox');
+        if (summaryBox) summaryBox.textContent = summaryText;
+
+        const clientEmail = state.branches['step_4']?.email || 'your email';
+        const clientWebsite = state.branches['step_3']?.website || 'your project';
+        const personalizedNext = document.getElementById('personalizedNext');
+        
+        if (personalizedNext) {
+          personalizedNext.innerHTML = '';
+          const h3 = document.createElement('h3');
+          h3.className = 'satoshi font-bold text-[16px] text-[#0A0A0B]';
+          h3.textContent = `Next steps for ${service}:`;
+
+          const p = document.createElement('p');
+          p.className = 'text-[13px] text-[#0A0A0B]/70 leading-6';
+          p.innerHTML = `Audit complete for <b>${escapeHTML(clientWebsite)}</b>. Teardown report routing to <b>${escapeHTML(clientEmail)}</b> within 24hrs.`;
+          
+          personalizedNext.appendChild(h3);
+          personalizedNext.appendChild(p);
+        }
+
+        clearState();
+      } catch (err) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+        const err4 = document.getElementById('err4');
+        if (err4) {
+          err4.textContent = 'Transmission failed. Please check your connection and try again.';
+          err4.classList.remove('hidden');
+        }
+        console.error('Submission error:', err);
+        saveState();
+      }
+    });
+  }
+
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const sb = document.getElementById('summaryBox');
+      if (!sb) return;
+      navigator.clipboard.writeText(sb.textContent).then(() => {
+        copyBtn.textContent = '✓ Copied';
+        setTimeout(() => { copyBtn.textContent = 'Copy summary'; }, 2000);
+      }).catch(() => {
+        copyBtn.textContent = 'Copy failed';
+      });
+    });
+  }
+
+  if (newBtn) {
+    newBtn.addEventListener('click', () => {
+      clearState();
+      location.reload();
+    });
+  }
+
+  // Restore State on Reload
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed && parsed.service) {
-        current = parsed.current || 1; service = parsed.service; state = parsed.state || { branches: {} };
-        // if restoring mid-flow, hide step1-cards and render appropriate step
-        const stepContainer = document.getElementById('step1-cards'); if (stepContainer) stepContainer.classList.add('hidden');
-        if (current === 2) renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progressBar, progressText);
-        else if (current === 3) renderStep3(dynamic, progressBar, progressText, prevBtn, nextBtn);
-        else if (current === 4) renderStep4(dynamic, progressBar, progressText, nextBtn, submitBtn);
-      } else { renderStep1(); }
-    } else { renderStep1(); }
-  } catch (e) { clearState(); renderStep1(); }
+        current = parsed.current || 1;
+        service = parsed.service;
+        state = parsed.state || { branches: {} };
+
+        if (current > 1) {
+          if (step1Cards) step1Cards.classList.add('hidden');
+          if (current === 2) renderStep2();
+          else if (current === 3) renderStep3();
+          else if (current === 4) renderStep4();
+        } else {
+          renderStep1();
+        }
+      }
+    }
+  } catch (e) {
+    clearState();
+    renderStep1();
+  }
 });
 </script>
 </body>
