@@ -8,7 +8,7 @@
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>
-tailwind.config={theme:{extend:{colors:{paper:'#F9F8F6',paper2:'#EFE9E3',borderc:'#D9CFC7',warm:'#C9B59C',ink:'#0A0A0B',signal:'#FF4D12'}}}}
+  tailwind.config={theme:{extend:{colors:{paper:'#F9F8F6',paper2:'#EFE9E3',borderc:'#D9CFC7',warm:'#C9B59C',ink:'#0A0A0B',signal:'#FF4D12'}}}}
 </script>
 <style>
 *{box-sizing:border-box} html,body{overflow-x:hidden}
@@ -19,7 +19,7 @@ input,select,textarea{font-size:16px !important}
 .card-active{border-color:#0A0A0B !important;background:#FFFFFF !important;position:relative;box-shadow:0 6px 28px rgba(0,0,0,0.08)}
 .card-active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#FF4D12;border-radius:16px 0 0 16px}
 .card-active .dot{opacity:1 !important}
-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23C9B59C' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23C9B59C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:38px}
 .dark-select { background-color: rgba(255,255,255,0.1); color: #F9F8F6; }
 .dark-select option { background-color: #0A0A0B; color: #F9F8F6; }
 input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !important;box-shadow:0 0 0 3px rgba(201,181,156,0.35) !important}
@@ -29,93 +29,111 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#0A0A0B !impor
 </head>
 <body class="bg-[#F9F8F6] min-h-screen flex flex-col">
 <header class="w-full border-b border-[#D9CFC7] bg-[#F9F8F6]/90 backdrop-blur-md sticky top-0 z-50">
-<div class="max-w-3xl mx-auto px-5 sm:px-8 h-[64px] flex items-center justify-between">
-<div class="flex items-center gap-3"><div class="w-2.5 h-2.5 rounded-full bg-[#FF4D12] animate-pulse"></div><span class="satoshi font-bold text-[13px] tracking-tight text-[#0A0A0B]">Hamza Jawaid — Intake Assistant</span><span class="mono text-[10px] text-[#0A0A0B]/50 hidden sm:inline border border-[#D9CFC7] rounded-full px-2 py-1 bg-[#EFE9E3]">QA HARDENED</span></div>
-<div class="mono text-[11px] text-[#0A0A0B]/60" id="progressText">Step 1 of 4 • Objective</div>
-</div>
-<div class="w-full h-[1px] bg-[#D9CFC7]"><div id="progressBar" class="h-full bg-[#0A0A0B] transition-all duration-500 relative" style="width:25%"><div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#FF4D12] shadow-[0_0_0_4px_rgba(201,181,156,0.4)]"></div></div></div>
+  <div class="max-w-3xl mx-auto px-5 sm:px-8 h-[64px] flex items-center justify-between">
+    <div class="flex items-center gap-3 w-full">
+      <div class="flex items-center gap-3">
+        <div class="w-2.5 h-2.5 rounded-full bg-[#FF4D12] animate-pulse"></div>
+        <span class="satoshi font-bold text-[13px] tracking-tight text-[#0A0A0B]">Hamza Jawaid — Discovery</span>
+      </div>
+      <div class="ml-auto mono text-[11px] text-[#0A0A0B]/60" id="progressText">Step 1 of 4 • Objective</div>
+    </div>
+  </div>
+  <div class="w-full h-[1px] bg-[#D9CFC7]"><div id="progressBar" class="h-full bg-[#0A0A0B] transition-all duration-500 relative" style="width:25%"></div></div>
 </header>
 
 <main class="max-w-3xl mx-auto px-5 sm:px-8 py-6 sm:py-10 w-full flex-grow flex flex-col gap-6">
-<div id="chat" class="flex flex-col gap-5">
-<div class="flex gap-3">
-<div class="w-8 h-8 rounded-full bg-[#0A0A0B] text-[#F9F8F6] flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1">H</div>
-<div class="space-y-3 max-w-[92%] sm:max-w-[78%]">
-<div class="bg-white border border-[#D9CFC7] rounded-2xl rounded-tl-sm p-5 shadow-sm">
-<p class="satoshi font-bold text-[20px] sm:text-[24px] leading-[1.15] text-[#0A0A0B]">Hey — let's see if we're a fit.</p>
-<p class="text-[13px] leading-6 text-[#0A0A0B]/70 mt-3">Pick your track below. You can switch tracks seamlessly at any point; the assistant automatically recalibrates state parameters.</p>
-<div class="mt-3 flex flex-wrap gap-2 mono text-[10px]"><span class="tag rounded-full px-2.5 py-1">~6 min</span><span class="tag rounded-full px-2.5 py-1">Private</span><span class="border border-[#C9B59C] bg-[#F9F8F6] rounded-full px-2.5 py-1 text-[#0A0A0B]/70">Dynamic track-switch active</span></div>
-</div>
-</div>
-</div>
+  <div id="chat" class="flex flex-col gap-5">
+    <div class="flex gap-3">
+      <div class="w-8 h-8 rounded-full bg-[#0A0A0B] text-[#F9F8F6] flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1">H</div>
+      <div class="space-y-3 max-w-[92%] sm:max-w-[78%]">
+        <div class="bg-white border border-[#D9CFC7] rounded-2xl rounded-tl-sm p-5 shadow-sm">
+          <p class="satoshi font-bold text-[20px] sm:text-[24px] leading-[1.15] text-[#0A0A0B]">Hey — let's see if we're a fit.</p>
+          <p class="text-[13px] leading-6 text-[#0A0A0B]/70 mt-3">Pick your track below. You can switch tracks seamlessly at any point; the assistant automatically recalibrates state parameters.</p>
+          <div class="mt-3 flex flex-wrap gap-2 mono text-[10px]"><span class="tag rounded-full px-2.5 py-1">~6 min</span><span class="tag rounded-full px-2.5 py-1">Private</span></div>
+        </div>
+      </div>
+    </div>
 
-<div id="step1-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-<div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Growth & Performance Marketing">
-<div><div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 01</span><div class="w-2 h-2 rounded-full bg-[#FF4D12] opacity-0 dot"></div></div><h3 class="satoshi font-bold text-[16px] text-[#0A0A0B] mb-1">Growth & Performance Marketing</h3><p class="text-[13px] text-[#0A0A0B]/70 leading-relaxed">Paid media scale-up, funnel optimization, and unit economics validation.</p></div>
-<div class="mt-4 pt-3 border-t border-[#D9CFC7] flex items-center justify-between mono text-[11px] text-[#0A0A0B]/60"><span>Ad spend, CAC/ROAS</span><span>~2 min</span></div>
-</div>
-<div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Google Ad Grants">
-<div><div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 02</span><div class="w-2 h-2 rounded-full bg-[#FF4D12] opacity-0 dot"></div></div><h3 class="satoshi font-bold text-[16px] text-[#0A0A0B] mb-1">Google Ad Grants</h3><p class="text-[13px] text-[#0A0A0B]/70 leading-relaxed">Nonprofit compliance, structure reconstruction, and conversion tracking.</p></div>
-<div class="mt-4 pt-3 border-t border-[#D9CFC7] flex items-center justify-between mono text-[11px] text-[#0A0A0B]/60"><span>501c3 status, CTR</span><span>~2 min</span></div>
-</div>
-<div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="E-Commerce & Custom Web">
-<div><div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 03</span><div class="w-2 h-2 rounded-full bg-[#FF4D12] opacity-0 dot"></div></div><h3 class="satoshi font-bold text-[16px] text-[#0A0A0B] mb-1">E-Commerce & Custom Web</h3><p class="text-[13px] text-[#0A0A0B]/70 leading-relaxed">High-converting storefronts, custom web apps, and speed optimization.</p></div>
-<div class="mt-4 pt-3 border-t border-[#D9CFC7] flex items-center justify-between mono text-[11px] text-[#0A0A0B]/60"><span>Platform, friction points</span><span>~2 min</span></div>
-</div>
-<div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Consultancy & Advisory">
-<div><div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 04</span><div class="w-2 h-2 rounded-full bg-[#FF4D12] opacity-0 dot"></div></div><h3 class="satoshi font-bold text-[16px] text-[#0A0A0B] mb-1">Consultancy & Advisory</h3><p class="text-[13px] text-[#0A0A0B]/70 leading-relaxed">Strategic growth advisory, executive sparring, and fractional leadership.</p></div>
-<div class="mt-4 pt-3 border-t border-[#D9CFC7] flex items-center justify-between mono text-[11px] text-[#0A0A0B]/60"><span>Business summary</span><span>~2 min</span></div>
-</div>
-</div>
-<p id="err1" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box">Please select an objective track above to proceed.</p>
+    <div id="step1-cards" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+      <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Growth & Performance Marketing">
+        <div>
+          <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 01</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
+          <h3 class="satoshi font-bold text-[15px]">Growth & Performance Marketing</h3>
+          <p class="mt-2 text-[13px] text-[#0A0A0B]/70">Ad spend, CAC/ROAS</p>
+        </div>
+      </div>
+      <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Google Ad Grants">
+        <div>
+          <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 02</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
+          <h3 class="satoshi font-bold text-[15px]">Google Ad Grants</h3>
+          <p class="mt-2 text-[13px] text-[#0A0A0B]/70">501c3 status, CTR</p>
+        </div>
+      </div>
+      <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="E-Commerce & Custom Web">
+        <div>
+          <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 03</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
+          <h3 class="satoshi font-bold text-[15px]">E-Commerce & Custom Web</h3>
+          <p class="mt-2 text-[13px] text-[#0A0A0B]/70">Platform, friction points</p>
+        </div>
+      </div>
+      <div class="card p-5 rounded-2xl cursor-pointer flex flex-col justify-between" data-service="Consultancy & Advisory">
+        <div>
+          <div class="flex items-center justify-between mb-3"><span class="mono text-[10px] uppercase tracking-wider text-[#0A0A0B]/60">Track 04</span><div class="w-2 h-2 rounded-full bg-[#FF4D12]"></div></div>
+          <h3 class="satoshi font-bold text-[15px]">Consultancy & Advisory</h3>
+          <p class="mt-2 text-[13px] text-[#0A0A0B]/70">Business summary</p>
+        </div>
+      </div>
+    </div>
 
-<div id="dynamic" class="flex flex-col gap-5"></div>
-</div>
+    <p id="err1" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box">Please select an objective track above to proceed.</p>
 
-<div id="success" class="hidden max-w-3xl mx-auto px-5 sm:px-8 py-10 w-full flex-grow flex flex-col gap-6">
-<div class="bg-white border border-[#D9CFC7] rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-[#0A0A0B] text-white flex items-center justify-center font-bold">✓</div>
-<div><h2 class="satoshi font-bold text-[20px] text-[#0A0A0B]">Assessment package transmitted.</h2><p class="text-[13px] text-[#0A0A0B]/70">Your data has been securely routed for review.</p></div>
-</div>
-<div id="personalizedNext" class="bg-[#F9F8F6] border border-[#D9CFC7] rounded-xl p-5 space-y-2"></div>
-<div class="space-y-2"><div class="flex items-center justify-between"><span class="mono text-[11px] uppercase text-[#0A0A0B]/60">Transmission Summary Payload</span><button id="copyBtn" class="mono text-[11px] text-[#FF4D12] hover:underline">Copy summary</button></div><textarea id="summaryBox" readonly rows="6" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] mono text-[12px] text-[#0A0A0B]"></textarea></div>
-<button id="newBtn" class="w-full py-4 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] satoshi font-bold text-[14px] hover:bg-black/90 transition-colors">Start New Assessment</button>
-</div>
-</div>
+    <div id="dynamic" class="flex flex-col gap-5"></div>
+  </div>
+
+  <div id="success" class="hidden max-w-3xl mx-auto px-5 sm:px-8 py-10 w-full flex-grow flex flex-col gap-6">
+    <div class="bg-white border border-[#D9CFC7] rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-[#0A0A0B] text-white flex items-center justify-center font-bold">✓</div>
+        <div><h2 class="satoshi font-bold text-[20px] text-[#0A0A0B]">Assessment package transmitted.</h2><p class="text-[13px] text-[#0A0A0B]/70">Your data has been securely routed for review.</p></div>
+      </div>
+      <div id="personalizedNext" class="bg-[#F9F8F6] border border-[#D9CFC7] rounded-xl p-5 space-y-2"></div>
+      <div class="space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="mono text-[11px] uppercase text-[#0A0A0B]/60">Transmission Summary Payload</span>
+          <div>
+            <button id="copyBtn" class="mono text-[11px] px-3 py-1 rounded-xl border">Copy summary</button>
+          </div>
+        </div>
+        <pre id="summaryBox" class="bg-white border border-[#D9CFC7] rounded-xl p-3 text-[12px] mono overflow-auto max-h-40"></pre>
+        <button id="newBtn" class="w-full py-4 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] satoshi font-bold text-[14px] hover:bg-black/90 transition-colors">Start New Assessment</button>
+      </div>
+    </div>
+  </div>
 </main>
 
 <footer class="w-full border-t border-[#D9CFC7] py-4 bg-[#F9F8F6] mt-auto">
-<div class="max-w-3xl mx-auto px-5 sm:px-8 flex items-center justify-between text-[11px] mono text-[#0A0A0B]/60">
-<span>hjbehari@gmail.com</span><span>QA Hardened Engine</span>
-</div>
+  <div class="max-w-3xl mx-auto px-5 sm:px-8 flex items-center justify-between text-[11px] mono text-[#0A0A0B]/60">
+    <span>hjbehari@gmail.com</span><span>QA Hardened Engine</span>
+  </div>
 </footer>
 
 <div id="nav" class="hidden sticky bottom-0 left-0 right-0 bg-[#F9F8F6]/90 backdrop-blur-md border-t border-[#D9CFC7] py-4">
-<div class="max-w-3xl mx-auto px-5 sm:px-8 flex items-center justify-between">
-<div class="flex items-center gap-3"><button id="prevBtn" class="hidden px-4 py-2.5 rounded-xl border border-[#D9CFC7] bg-white text-[13px] satoshi font-bold text-[#0A0A0B] hover:bg-[#F9F8F6]">Back</button><button id="changeTrackBtn" class="hidden px-4 py-2.5 rounded-xl border border-[#D9CFC7] bg-white text-[13px] mono text-[#0A0A0B]/70 hover:bg-[#F9F8F6]">Switch Track</button></div>
-<div class="flex items-center gap-3"><button id="nextBtn" class="px-6 py-2.5 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] text-[13px] satoshi font-bold hover:bg-black/90">Continue</button><button id="submitBtn" class="hidden px-6 py-2.5 rounded-xl bg-[#FF4D12] text-white text-[13px] satoshi font-bold hover:bg-[#FF4D12]/90">Submit Package</button></div>
-</div>
+  <div class="max-w-3xl mx-auto px-5 sm:px-8 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <button id="prevBtn" class="hidden px-4 py-2.5 rounded-xl border border-[#D9CFC7] bg-white text-[13px] satoshi font-bold text-[#0A0A0B] hover:bg-[#F9F8F6]">Back</button>
+      <button id="changeTrackBtn" class="px-4 py-2.5 rounded-xl border border-[#D9CFC7] bg-white text-[13px] satoshi font-bold text-[#0A0A0B] hover:bg-[#F9F8F6]">Change Track</button>
+    </div>
+    <div class="flex items-center gap-3">
+      <button id="nextBtn" class="px-6 py-2.5 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] text-[13px] satoshi font-bold hover:bg-black/90">Continue</button>
+      <button id="submitBtn" class="hidden px-6 py-2.5 rounded-xl bg-[#0A0A0B] text-[#F9F8F6] text-[13px] satoshi font-bold hover:bg-black/90">Submit</button>
+    </div>
+  </div>
 </div>
 
 <script>
 // --- ENTERPRISE STATE MACHINE ---
 let current = 1, service = '', state = { branches: {} };
 const STORAGE_KEY = 'discovery_palette_v6';
-
-const progressBar = document.getElementById('progressBar');
-const progressText = document.getElementById('progressText');
-const chat = document.getElementById('chat');
-const dynamic = document.getElementById('dynamic');
-const step1Cards = document.getElementById('step1-cards');
-const err1 = document.getElementById('err1');
-const nav = document.getElementById('nav');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const submitBtn = document.getElementById('submitBtn');
-const changeTrackBtn = document.getElementById('changeTrackBtn');
-const success = document.getElementById('success');
-
 const BLOCKLIST = ['idk', 'n/a', 'na', 'none', 'null', 'test', 'asdf', 'qwerty', 'blah', '...'];
 
 function isVague(val) {
@@ -144,76 +162,36 @@ function isValidEmail(val) {
 }
 
 function saveState() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ current, service, state }));
-  } catch (e) {}
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ current, service, state })); } catch (e) {}
 }
+function clearState() { state = { branches: {} }; service = ''; current = 1; try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem('discovery_palette_v5'); localStorage.removeItem('discovery_palette_v4'); } catch (e) {} }
 
-function clearState() {
-  state = { branches: {} };
-  service = '';
-  current = 1;
-  try {
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem('discovery_palette_v5');
-    localStorage.removeItem('discovery_palette_v4');
-  } catch (e) {}
-}
-
-function updateProgress() {
-  progressBar.style.width = (current / 4 * 100) + '%';
+function updateProgress(progressBar, progressText) {
+  if (progressBar) progressBar.style.width = (current / 4 * 100) + '%';
   const labels = { 1: 'Objective', 2: 'Deep Dive', 3: 'Scoping', 4: 'Validation' };
-  progressText.textContent = `Step ${current} of 4 • ${labels[current]}`;
+  if (progressText) progressText.textContent = `Step ${current} of 4 • ${labels[current]}`;
 }
 
-function assistantBubble(htmlContent) {
-  const wrap = document.createElement('div');
-  wrap.className = 'flex gap-3';
-  
-  const avatar = document.createElement('div');
-  avatar.className = 'w-8 h-8 rounded-full bg-[#0A0A0B] text-[#F9F8F6] flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1';
-  avatar.textContent = 'H';
-  
-  const box = document.createElement('div');
-  box.className = 'bg-white border border-[#D9CFC7] rounded-2xl rounded-tl-sm p-4 sm:p-5 text-[13px] leading-6 max-w-[92%] sm:max-w-[78%] text-[#0A0A0B]';
-  box.innerHTML = htmlContent;
-  
-  wrap.appendChild(avatar);
-  wrap.appendChild(box);
-  dynamic.appendChild(wrap);
+function assistantBubble(htmlContent, dynamic) {
+  const wrap = document.createElement('div'); wrap.className = 'flex gap-3';
+  const avatar = document.createElement('div'); avatar.className = 'w-8 h-8 rounded-full bg-[#0A0A0B] text-[#F9F8F6] flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1'; avatar.textContent = 'H';
+  const box = document.createElement('div'); box.className = 'bg-white border border-[#D9CFC7] rounded-2xl rounded-tl-sm p-4 sm:p-5 text-[13px] leading-6 max-w-[92%] sm:max-w-[78%] text-[#0A0A0B]'; box.innerHTML = htmlContent;
+  wrap.appendChild(avatar); wrap.appendChild(box); dynamic.appendChild(wrap);
+}
+function userBubble(textString, dynamic) {
+  const wrap = document.createElement('div'); wrap.className = 'flex gap-3 ml-auto flex-row-reverse';
+  const avatar = document.createElement('div'); avatar.className = 'w-8 h-8 rounded-full bg-[#FF4D12] text-white flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1'; avatar.textContent = 'You';
+  const box = document.createElement('div'); box.className = 'bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl rounded-tr-sm p-4 text-[13px] max-w-[92%] sm:max-w-[78%]'; box.textContent = textString;
+  wrap.appendChild(avatar); wrap.appendChild(box); dynamic.appendChild(wrap);
 }
 
-function userBubble(textString) {
-  const wrap = document.createElement('div');
-  wrap.className = 'flex gap-3 ml-auto flex-row-reverse';
-  
-  const avatar = document.createElement('div');
-  avatar.className = 'w-8 h-8 rounded-full bg-[#FF4D12] text-white flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1';
-  avatar.textContent = 'You';
-  
-  const box = document.createElement('div');
-  box.className = 'bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl rounded-tr-sm p-4 text-[13px] max-w-[92%] sm:max-w-[78%]';
-  box.textContent = textString;
-  
-  wrap.appendChild(avatar);
-  wrap.appendChild(box);
-  dynamic.appendChild(wrap);
-}
+function getActiveBranchKey() { return `step_${current}`; }
 
-function getActiveBranchKey() {
-  return `step_${current}`;
-}
-
-function attachInputListeners() {
+function attachInputListeners(dynamic) {
   dynamic.querySelectorAll('input, select, textarea').forEach(el => {
-    const key = el.id || el.name;
-    if (!key) return;
-
+    const key = el.id || el.name; if (!key) return;
     const handler = () => {
-      if (!state.branches[getActiveBranchKey()]) {
-        state.branches[getActiveBranchKey()] = {};
-      }
-      
+      if (!state.branches[getActiveBranchKey()]) state.branches[getActiveBranchKey()] = {};
       if (el.type === 'checkbox') {
         const groupName = el.name;
         const checkedValues = [...dynamic.querySelectorAll(`input[name="${groupName}"]:checked`)].map(i => i.value);
@@ -223,107 +201,50 @@ function attachInputListeners() {
       }
       saveState();
     };
-
     el.addEventListener('input', handler);
     el.addEventListener('change', handler);
   });
 }
 
-function restoreValues() {
+function restoreValues(dynamic) {
   const branchData = state.branches[getActiveBranchKey()] || {};
   dynamic.querySelectorAll('input, select, textarea').forEach(el => {
-    const key = el.id || el.name;
-    if (!key) return;
-
+    const key = el.id || el.name; if (!key) return;
     if (el.type === 'checkbox') {
-      const vals = branchData[el.name] || [];
-      el.checked = vals.includes(el.value);
-    } else {
-      if (branchData[key] !== undefined) {
-        el.value = branchData[key];
-      }
-    }
+      const vals = branchData[el.name] || []; el.checked = vals.includes(el.value);
+    } else { if (branchData[key] !== undefined) el.value = branchData[key]; }
   });
 }
 
-document.querySelectorAll('.card').forEach(card => {
-  card.addEventListener('click', () => {
-    const newService = card.dataset.service;
-    if (service !== newService) {
-      clearState();
-      service = newService;
-      state.service = service;
-      saveState();
-      dynamic.innerHTML = '';
-    }
-    
-    document.querySelectorAll('.card').forEach(c => c.classList.remove('card-active'));
-    card.classList.add('card-active');
-    err1.classList.add('hidden');
-    
-    userBubble(`Selected: ${service}`);
-    setTimeout(() => {
-      assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 2 of 4 — Deep Dive</span><br><b class="satoshi text-[15px] text-[#0A0A0B]">Recalibrated to track.</b><br>Loading specialized metrics.`);
-      renderStep2();
-    }, 300);
-  });
-});
-
-function renderStep2() {
-  current = 2; 
-  updateProgress(); 
-  nav.classList.remove('hidden'); 
-  prevBtn.classList.add('hidden'); 
-  changeTrackBtn.classList.remove('hidden');
-  
+function renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progressBar, progressText) {
+  current = 2; updateProgress(progressBar, progressText); nav.classList.remove('hidden'); prevBtn.classList.add('hidden'); if (changeTrackBtn) changeTrackBtn.classList.remove('hidden');
   let html = '';
   if (service === 'Growth & Performance Marketing') {
-    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Growth economics — paid allocation.</p><div class="space-y-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Monthly ad spend *</label><select id="ad_spend" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"><option value="">Select</option><option><$1k</option><option>$1-5k</option><option>$5-15k</option><option>$15k+</option><option>Not running paid yet</option></select></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Current CAC / ROAS</label><input id="current_cac" placeholder="e.g. CAC $62, ROAS 1.8x" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Target CAC / ROAS</label><input id="target_cac" placeholder="e.g. CAC $35, ROAS 3x" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Primary bottleneck in acquisition? * (min 10 chars)</label><textarea id="breaking_acq" rows="3" placeholder="Describe the core constraint..." class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] text-[#0A0A0B]"></textarea></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div></div>`;
+    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Growth economics — paid allocation.</p><div class="space-y-3"><label class=\"mono text-[13px]\">Monthly ad spend (approx)</label><select id=\"ad_spend\" class=\"w-full rounded-xl p-3 mt-1\"><option value=\"\">Select...</option><option value=\"< $1k\">< $1k</option><option value=\"$1k-$5k\">$1k-$5k</option><option value=\">$5k-$20k\">$5k-$20k</option><option value=\">$20k+\">$20k+</option></select></div><div><label class=\"mono text-[13px]\">Primary bottleneck</label><textarea id=\"breaking_acq\" class=\"w-full rounded-xl p-3 mt-1\" rows=\"3\"></textarea></div><p id=\"err2\" class=\"hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box\"></p></div>`;
   } else if (service === 'Google Ad Grants') {
-    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Grants compliance & structure.</p><div class="space-y-4"><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Registered nonprofit? *</label><select id="nonprofit_status" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"><option value="">Select</option><option>Yes 501c3 US</option><option>Yes non-US</option><option>Pending</option><option>No</option></select></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Grants account status *</label><select id="grants_status" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"><option value="">Select</option><option>No account yet</option><option>Yes active</option><option>Yes suspended</option><option>Yes under 5% CTR</option></select></div></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div></div>`;
+    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Grants compliance & structure.</p><div class="space-y-3"><label class=\"mono text-[13px]\">Nonprofit status</label><select id=\"nonprofit_status\" class=\"w-full rounded-xl p-3 mt-1\"><option value=\"\">Select...</option><option value=\"Yes\">Yes</option><option value=\"No\">No</option></select></div><div><label class=\"mono text-[13px]\">Grant account status</label><select id=\"grants_status\" class=\"w-full rounded-xl p-3 mt-1\"><option value=\"\">Select...</option><option value=\"Active\">Active</option><option value=\"Inactive\">Inactive</option></select></div><p id=\"err2\" class=\"hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box\"></p></div>`;
   } else if (service === 'E-Commerce & Custom Web') {
-    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Storefront conversion architecture.</p><div class="space-y-4"><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Platform *</label><select id="platform" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"><option value="">Select</option><option>Shopify</option><option>WooCommerce</option><option>Custom</option><option>Webflow</option></select></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Store URL</label><input id="store_url" type="url" placeholder="https://store.com" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Storefront friction points:</label><div class="flex flex-wrap gap-2"><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-[#D9CFC7] bg-[#EFE9E3] text-[13px] cursor-pointer"><input type="checkbox" name="store_problems" value="Slow load"> Slow load</label><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-[#D9CFC7] bg-[#EFE9E3] text-[13px] cursor-pointer"><input type="checkbox" name="store_problems" value="Trust gap"> Trust gap</label><label class="flex items-center gap-2 px-3 py-2 rounded-full border border-[#D9CFC7] bg-[#EFE9E3] text-[13px] cursor-pointer"><input type="checkbox" name="store_problems" value="Checkout friction"> Checkout friction</label></div></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div></div>`;
+    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Storefront conversion architecture.</p><div class="space-y-3"><label class=\"mono text-[13px]\">Platform</label><select id=\"platform\" class=\"w-full rounded-xl p-3 mt-1\"><option value=\"\">Select...</option><option value=\"Shopify\">Shopify</option><option value=\"WooCommerce\">WooCommerce</option><option value=\"Custom\">Custom</option></select></div><p id=\"err2\" class=\"hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box\"></p></div>`;
   } else {
-    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Consultancy & Advisory.</p><div class="space-y-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Business summary * (min 10 chars)</label><input id="biz_sentence" placeholder="We help X achieve Y" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div><p id="err2" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div></div>`;
+    html = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Consultancy & Advisory.</p><div class="space-y-3"><label class=\"mono text-[13px]\">Briefly summarize your business</label><textarea id=\"biz_sentence\" class=\"w-full rounded-xl p-3 mt-1\" rows=\"3\"></textarea></div><p id=\"err2\" class=\"hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box\"></p></div>`;
   }
-  
-  dynamic.innerHTML = html;
-  attachInputListeners();
-  restoreValues();
-  saveState();
+  dynamic.innerHTML = html; attachInputListeners(dynamic); restoreValues(dynamic); saveState();
 }
 
-function renderStep3() {
-  current = 3; 
-  updateProgress(); 
-  prevBtn.classList.remove('hidden');
-  
-  let html = `<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px]">Scoping & Infrastructure Validation.</p><div class="space-y-4"><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Primary Destination URL *</label><input id="website" type="url" placeholder="https://company.com" class="w-full p-4 rounded-xl border border-white/20 bg-white/10 min-h-[48px] text-[#F9F8F6] placeholder:text-white/40"></div><div><label class="mono text-[10px] uppercase opacity-60 mb-2 block">Implementation Timeline *</label><select id="timeline" class="w-full p-4 rounded-xl border border-white/20 dark-select min-h-[48px] bg-[#0A0A0B] text-white"><option value="">Select</option><option>Immediate (Now)</option><option>2-4 Weeks</option><option>Exploratory Phase</option></select></div><p id="err3" class="hidden mono text-[12px] text-[#F9F8F6] bg-white/10 border border-white/20 rounded-xl p-3 error-box"></p></div></div>`;
-  
-  dynamic.innerHTML = html;
-  attachInputListeners();
-  restoreValues();
-  nextBtn.classList.remove('hidden');
-  submitBtn.classList.add('hidden');
-  saveState();
+function renderStep3(dynamic, progressBar, progressText, prevBtn, nextBtn) {
+  current = 3; updateProgress(progressBar, progressText); prevBtn.classList.remove('hidden');
+  let html = `<div class="space-y-5 bg-[#0A0A0B] text-[#F9F8F6] rounded-2xl p-6"><p class="satoshi font-bold text-[16px]">Scoping & Infrastructure Validation.</p><div class="space-y-4"><label class=\"mono text-[13px]\">Project website (https://...)</label><input id=\"website\" class=\"w-full rounded-xl p-3 mt-1\" placeholder=\"yoursite.org\"></div><div><label class=\"mono text-[13px]\">Estimated timeline</label><select id=\"timeline\" class=\"w-full rounded-xl p-3 mt-1 dark-select\"><option value=\"\">Select...</option><option value=\"0-4 weeks\">0-4 weeks</option><option value=\"1-3 months\">1-3 months</option><option value=\"3+ months\">3+ months</option></select></div><p id=\"err3\" class=\"hidden mono text-[12px] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box\"></p></div>`;
+  dynamic.innerHTML = html; attachInputListeners(dynamic); restoreValues(dynamic); nextBtn.classList.remove('hidden'); saveState();
 }
 
-function renderStep4() {
-  current = 4; 
-  updateProgress(); 
-  nextBtn.classList.add('hidden'); 
-  submitBtn.classList.remove('hidden');
-  
-  dynamic.innerHTML = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Routing details.</p><div class="space-y-4"><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Full Name *</label><input id="name" placeholder="Alex Mercer" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div><div><label class="mono text-[11px] uppercase text-[#0A0A0B]/60 mb-2 block">Work Email *</label><input id="email" type="email" placeholder="alex@company.com" class="w-full p-4 rounded-xl border border-[#D9CFC7] bg-[#F9F8F6] min-h-[48px] text-[#0A0A0B]"></div></div><p id="err4" class="hidden mono text-[12px] text-[#0A0A0B] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box"></p></div></div>`;
-  
-  attachInputListeners();
-  restoreValues();
-  saveState();
+function renderStep4(dynamic, progressBar, progressText, nextBtn, submitBtn) {
+  current = 4; updateProgress(progressBar, progressText); nextBtn.classList.add('hidden'); submitBtn.classList.remove('hidden');
+  dynamic.innerHTML = `<div class="space-y-5 bg-white border border-[#D9CFC7] rounded-2xl p-6"><p class="satoshi font-bold text-[18px] text-[#0A0A0B]">Routing details.</p><div class="space-y-4"><label class=\"mono text-[13px]\">Your name</label><input id=\"name\" class=\"w-full rounded-xl p-3 mt-1\"><label class=\"mono text-[13px]\">Work email</label><input id=\"email\" class=\"w-full rounded-xl p-3 mt-1\" placeholder=\"you@company.com\"></div><p id=\"err4\" class=\"hidden mono text-[12px] bg-white border border-[#D9CFC7] rounded-xl p-3 error-box\"></p></div>`;
+  attachInputListeners(dynamic); restoreValues(dynamic); saveState();
 }
 
 function validateStep2() {
-  const err = document.getElementById('err2');
-  const branchData = state.branches['step_2'] || {};
+  const err = document.getElementById('err2'); const branchData = state.branches['step_2'] || {};
   if (service === 'Growth & Performance Marketing') {
     if (!branchData.ad_spend) { err.textContent = 'Please select your monthly ad spend.'; err.classList.remove('hidden'); return false; }
     if (isVague(branchData.breaking_acq)) { err.textContent = 'Please provide at least 5 meaningful characters for your bottleneck.'; err.classList.remove('hidden'); return false; }
@@ -334,151 +255,102 @@ function validateStep2() {
   } else {
     if (isVague(branchData.biz_sentence)) { err.textContent = 'Please summarize your business properly.'; err.classList.remove('hidden'); return false; }
   }
-  err.classList.add('hidden');
-  return true;
+  err.classList.add('hidden'); return true;
 }
+function validateStep3() { const err = document.getElementById('err3'); const branchData = state.branches['step_3'] || {}; if (!isValidUrl(branchData.website)) { err.textContent = 'Please enter a valid secure URL (https://...).'; err.classList.remove('hidden'); return false; } if (!branchData.timeline) { err.textContent = 'Please select an implementation timeline.'; err.classList.remove('hidden'); return false; } err.classList.add('hidden'); return true; }
+function validateStep4() { const err = document.getElementById('err4'); const branchData = state.branches['step_4'] || {}; const name = (branchData.name || '').trim(); const email = (branchData.email || '').trim(); if (name.length < 2) { err.textContent = 'Please enter your valid name.'; err.classList.remove('hidden'); return false; } if (!isValidEmail(email)) { err.textContent = 'Please provide a valid work email address.'; err.classList.remove('hidden'); return false; } err.classList.add('hidden'); return true; }
 
-function validateStep3() {
-  const err = document.getElementById('err3');
-  const branchData = state.branches['step_3'] || {};
-  if (!isValidUrl(branchData.website)) { err.textContent = 'Please enter a valid secure URL (https://...).'; err.classList.remove('hidden'); return false; }
-  if (!branchData.timeline) { err.textContent = 'Please select an implementation timeline.'; err.classList.remove('hidden'); return false; }
-  err.classList.add('hidden');
-  return true;
-}
+// Event wiring and initial DOM-dependent setup
+window.addEventListener('DOMContentLoaded', () => {
+  const progressBar = document.getElementById('progressBar');
+  const progressText = document.getElementById('progressText');
+  const chat = document.getElementById('chat');
+  const dynamic = document.getElementById('dynamic');
+  const step1Cards = document.getElementById('step1-cards');
+  const err1 = document.getElementById('err1');
+  const nav = document.getElementById('nav');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  const changeTrackBtn = document.getElementById('changeTrackBtn');
+  const success = document.getElementById('success');
+  const copyBtn = document.getElementById('copyBtn');
+  const newBtn = document.getElementById('newBtn');
 
-function validateStep4() {
-  const err = document.getElementById('err4');
-  const branchData = state.branches['step_4'] || {};
-  const name = (branchData.name || '').trim();
-  const email = (branchData.email || '').trim();
-  if (name.length < 2) { err.textContent = 'Please enter your valid name.'; err.classList.remove('hidden'); return false; }
-  if (!isValidEmail(email)) { err.textContent = 'Please provide a valid work email address.'; err.classList.remove('hidden'); return false; }
-  err.classList.add('hidden');
-  return true;
-}
+  updateProgress(progressBar, progressText);
 
-nextBtn.addEventListener('click', () => {
-  if (current === 1) {
-    if (!service) { err1.classList.remove('hidden'); return; }
-    renderStep2();
-  } else if (current === 2) {
-    if (!validateStep2()) return;
-    userBubble('Completed Step 2 analysis.');
-    setTimeout(() => { assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 3 of 4</span><br>Parameters locked. Verifying destination environment.`); renderStep3(); }, 300);
-  } else if (current === 3) {
-    if (!validateStep3()) return;
-    userBubble('Completed Step 3 scoping.');
-    setTimeout(() => { assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 4 of 4</span><br>Final verification step.`); renderStep4(); }, 300);
-  }
-});
-
-prevBtn.addEventListener('click', () => {
-  if (current === 3) { renderStep2(); prevBtn.classList.add('hidden'); }
-  else if (current === 4) { renderStep3(); }
-});
-
-changeTrackBtn.addEventListener('click', () => {
-  clearState();
-  chat.innerHTML = `<div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-[#0A0A0B] text-[#F9F8F6] flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1">H</div><div class="space-y-3 max-w-[92%]"><div class="bg-white border border-[#D9CFC7] rounded-2xl p-5"><p class="satoshi font-bold text-[20px] text-[#0A0A0B]">State reset. Pick your objective.</p></div></div></div>`;
-  dynamic.innerHTML = '';
-  nav.classList.add('hidden');
-  step1Cards.classList.remove('hidden');
-  document.querySelectorAll('.card').forEach(c => c.classList.remove('card-active'));
-  updateProgress();
-});
-
-submitBtn.addEventListener('click', async () => {
-  if (!validateStep4()) return;
-  userBubble('Submitting assessment package.');
-  
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Transmitting data...';
-
-  const flatPayload = { service, _subject: `Intake Submission: ${service}` };
-  Object.values(state.branches).forEach(branchObj => {
-    Object.assign(flatPayload, branchObj);
+  // card selection
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      const newService = card.dataset.service;
+      if (service !== newService) { clearState(); service = newService; state.service = service; saveState(); dynamic.innerHTML = ''; }
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('card-active'));
+      card.classList.add('card-active'); err1.classList.add('hidden'); userBubble(`Selected: ${service}`, dynamic);
+      setTimeout(() => { assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 2 of 4 — Deep Dive</span><br><b class="satoshi text-[15px] text-[#0A0A0B]">Recalibrated to track.</b>`, dynamic); renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progressBar, progressText); }, 300);
+    });
   });
 
-  try {
-    const response = await fetch('https://formsubmit.co/ajax/hjbehari@gmail.com', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(flatPayload)
-    });
+  nextBtn.addEventListener('click', () => {
+    if (current === 1) {
+      if (!service) { err1.classList.remove('hidden'); return; }
+      renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progressBar, progressText);
+    } else if (current === 2) {
+      if (!validateStep2()) return; userBubble('Completed Step 2 analysis.', dynamic); setTimeout(() => { assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 3 of 4</span><br>Parameters locked. Verifying destination environment.`, dynamic); renderStep3(dynamic, progressBar, progressText, prevBtn, nextBtn); }, 300);
+    } else if (current === 3) {
+      if (!validateStep3()) return; userBubble('Completed Step 3 scoping.', dynamic); setTimeout(() => { assistantBubble(`<span class="mono text-[10px] uppercase tracking-wider opacity-60">Step 4 of 4</span><br>Final verification step.`, dynamic); renderStep4(dynamic, progressBar, progressText, nextBtn, submitBtn); }, 300);
+    }
+  });
 
-    if (!response.ok) throw new Error('Network response failure');
+  prevBtn.addEventListener('click', () => {
+    if (current === 3) { renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progressBar, progressText); prevBtn.classList.add('hidden'); }
+    else if (current === 4) { renderStep3(dynamic, progressBar, progressText, prevBtn, nextBtn); }
+  });
 
-    chat.classList.add('hidden');
-    dynamic.classList.add('hidden');
-    nav.classList.add('hidden');
-    step1Cards.classList.add('hidden');
-    success.classList.remove('hidden');
-
-    const summaryText = Object.entries(flatPayload).map(([k, v]) => `${k.toUpperCase()}: ${Array.isArray(v) ? v.join(', ') : v}`).join('\n');
-    document.getElementById('summaryBox').textContent = summaryText;
-    
-    const clientEmail = state.branches['step_4']?.email || 'your email';
-    const clientWebsite = state.branches['step_3']?.website || 'your project';
-    document.getElementById('personalizedNext').innerHTML = '';
-    
-    const h3 = document.createElement('h3');
-    h3.className = 'satoshi font-bold text-[16px] text-[#0A0A0B]';
-    h3.textContent = `Next steps for ${service}:`;
-    
-    const p = document.createElement('p');
-    p.className = 'text-[13px] text-[#0A0A0B]/70 leading-6';
-    p.innerHTML = `Audit complete for <b>${clientWebsite}</b>. Teardown report routing to <b>${clientEmail}</b>.`;
-    
-    document.getElementById('personalizedNext').appendChild(h3);
-    document.getElementById('personalizedNext').appendChild(p);
-
+  if (changeTrackBtn) changeTrackBtn.addEventListener('click', () => {
     clearState();
-  } catch (err) {
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Retry Submission';
-    const err4 = document.getElementById('err4');
-    err4.textContent = 'Transmission failed due to network status. Please retry.';
-    err4.classList.remove('hidden');
-  }
-});
+    chat.innerHTML = `<div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-[#0A0A0B] text-[#F9F8F6] flex items-center justify-center satoshi font-bold text-[11px] shrink-0 mt-1">H</div><div class="space-y-3 max-w-[92%] sm:max-w-[78%]"><div class="bg-white border border-[#D9CFC7] rounded-2xl p-5 shadow-sm"><p class="satoshi font-bold text-[20px] sm:text-[24px] leading-[1.15] text-[#0A0A0B]">Hey — let's see if we're a fit.</p></div></div></div>`;
+    dynamic.innerHTML = ''; nav.classList.add('hidden'); step1Cards.classList.remove('hidden'); document.querySelectorAll('.card').forEach(c => c.classList.remove('card-active')); updateProgress(progressBar, progressText);
+  });
 
-document.getElementById('copyBtn').addEventListener('click', () => {
-  navigator.clipboard.writeText(document.getElementById('summaryBox').textContent).then(() => {
-    document.getElementById('copyBtn').textContent = 'Copied ✓';
-    setTimeout(() => { document.getElementById('copyBtn').textContent = 'Copy summary'; }, 2000);
-  }).catch(() => {});
-});
+  if (submitBtn) submitBtn.addEventListener('click', async () => {
+    if (!validateStep4()) return; userBubble('Submitting assessment package.', dynamic);
+    submitBtn.disabled = true; submitBtn.textContent = 'Transmitting data...';
+    const flatPayload = { service, _subject: `Intake Submission: ${service}` };
+    Object.values(state.branches).forEach(branchObj => Object.assign(flatPayload, branchObj));
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/hjbehari@gmail.com', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(flatPayload) });
+      if (!response.ok) throw new Error('Network response failure');
+      chat.classList.add('hidden'); dynamic.classList.add('hidden'); nav.classList.add('hidden'); step1Cards.classList.add('hidden'); success.classList.remove('hidden');
+      const summaryText = Object.entries(flatPayload).map(([k, v]) => `${k.toUpperCase()}: ${Array.isArray(v) ? v.join(', ') : v}`).join('\n');
+      document.getElementById('summaryBox').textContent = summaryText;
+      const clientEmail = state.branches['step_4']?.email || 'your email'; const clientWebsite = state.branches['step_3']?.website || 'your project';
+      document.getElementById('personalizedNext').innerHTML = '';
+      const h3 = document.createElement('h3'); h3.className = 'satoshi font-bold text-[16px] text-[#0A0A0B]'; h3.textContent = `Next steps for ${service}:`;
+      const p = document.createElement('p'); p.className = 'text-[13px] text-[#0A0A0B]/70 leading-6'; p.innerHTML = `Audit complete for <b>${clientWebsite}</b>. Teardown report routing to <b>${clientEmail}</b>.`;
+      document.getElementById('personalizedNext').appendChild(h3); document.getElementById('personalizedNext').appendChild(p);
+      clearState();
+    } catch (err) {
+      submitBtn.disabled = false; submitBtn.textContent = 'Retry Submission'; const err4 = document.getElementById('err4'); if (err4) { err4.textContent = 'Transmission failed due to network status. Please retry.'; err4.classList.remove('hidden'); }
+    }
+  });
 
-document.getElementById('newBtn').addEventListener('click', () => {
-  clearState();
-  location.reload();
-});
+  if (copyBtn) copyBtn.addEventListener('click', () => { navigator.clipboard.writeText(document.getElementById('summaryBox').textContent).then(() => { copyBtn.textContent = 'Copied ✓'; setTimeout(() => { copyBtn.textContent = 'Copy summary'; }, 2000); }).catch(() => {}); });
+  if (newBtn) newBtn.addEventListener('click', () => { clearState(); location.reload(); });
 
-window.addEventListener('DOMContentLoaded', () => {
+  // restore state if present
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed && parsed.service) {
-        current = parsed.current || 1;
-        service = parsed.service;
-        state = parsed.state || { branches: {} };
-        
+        current = parsed.current || 1; service = parsed.service; state = parsed.state || { branches: {} };
         step1Cards.classList.add('hidden');
-        if (current === 2) renderStep2();
-        else if (current === 3) renderStep3();
-        else if (current === 4) renderStep4();
-      } else {
-        step1Cards.classList.remove('hidden');
-      }
-    } else {
-      step1Cards.classList.remove('hidden');
-    }
-  } catch (e) {
-    clearState();
-    step1Cards.classList.remove('hidden');
-  }
+        if (current === 2) renderStep2(dynamic, step1Cards, nav, prevBtn, changeTrackBtn, progressBar, progressText);
+        else if (current === 3) renderStep3(dynamic, progressBar, progressText, prevBtn, nextBtn);
+        else if (current === 4) renderStep4(dynamic, progressBar, progressText, nextBtn, submitBtn);
+      } else { step1Cards.classList.remove('hidden'); }
+    } else { step1Cards.classList.remove('hidden'); }
+  } catch (e) { clearState(); step1Cards.classList.remove('hidden'); }
 });
 </script>
 </body>
